@@ -1,0 +1,9 @@
+# robots.txt pour Dague de Coeur
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://daguedecoeur.fr/sitemap.xml
+
+# Optimisation du crawl
+Crawl-delay: 1
