@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Cinzel, Lato } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
+const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel" });
+const lato = Lato({
+  subsets: ["latin"],
+  weight: ["100", "300", "400", "700", "900"],
+  variable: "--font-lato",
+});
 
 export const metadata: Metadata = {
   title: "Dague de Coeur - Communauté Française Daggerheart",
@@ -53,9 +59,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    <html lang="fr" className={`${cinzel.variable} ${lato.variable}`}>
       <head>
-        {/* Google Analytics */}
+        {/* Google Analytics - Rebuild Trigger */}
         <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-55XGMRT9T5"
@@ -70,7 +76,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body
-        className={`${inter.className} antialiased`}
+        className={`${lato.className} antialiased`}
       >
         {children}
       </body>

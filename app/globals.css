@@ -1,6 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-cinzel: var(--font-cinzel);
+  --font-lato: var(--font-lato);
+}
 
 :root {
   --background: #ffffff;
@@ -10,5 +13,7 @@
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden; /* From original style.css */
+  overflow-x: hidden;
+  background-color: #1a1b4b; /* Deep Indigo/Purple from screenshot */
+  color: #ffffff;
 }
