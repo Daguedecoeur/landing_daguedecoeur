@@ -9,7 +9,6 @@ export function useNewsletterSubscription() {
     setStatus("loading");
     setErrors({});
 
-    // 1. Validation Logic (Domain Layer)
     const result = SubscriptionSchema.safeParse(data);
 
     if (!result.success) {
@@ -24,14 +23,21 @@ export function useNewsletterSubscription() {
       return;
     }
 
-    // 2. Business Logic (Simulation of API call)
-    // In a real app, this would call a Repository interface (Adapter Layer)
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800)); // Simulate network request
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(result.data),
+      });
+
+      if (!response.ok) {
+        setStatus("error");
+        return;
+      }
+
       setStatus("success");
-    } catch (e) {
+    } catch {
       setStatus("error");
-      // Could set a global error here
     }
   };
 
