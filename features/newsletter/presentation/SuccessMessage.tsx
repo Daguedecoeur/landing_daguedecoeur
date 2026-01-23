@@ -1,30 +1,34 @@
+import content from "@/features/newsletter/content.json";
+
 export function SuccessMessage() {
+    const t = content.newsletter.success;
+
     return (
-        <div className="bg-[#1e1b4b]/50 p-8 rounded-xl border border-[#d4af37]/30 animate-fade-in-up text-left max-w-lg">
+        <div className="bg-dark-blue/50 p-8 rounded-xl border border-gold/30 animate-fade-in-up text-left max-w-lg">
             <h3 className="text-2xl font-cinzel font-bold text-white mb-4">
-                C&apos;est fait !
+                {t.title}
             </h3>
-            <p className="text-[#F4EBD0]/90 mb-2 text-lg">
-                Ton Kit de Démarrage est en route vers ta boîte mail (vérifie tes spams, les gobelins les cachent parfois).
+            <p className="text-cream/90 mb-2 text-lg">
+                {t.message}
             </p>
 
-            <div className="my-8 pt-6 border-t border-[#d4af37]/20">
-                <strong className="block text-xl text-[#d4af37] mb-2 font-cinzel">En attendant, ne reste pas seul !</strong>
-                <p className="text-[#F4EBD0] mb-6">La communauté t&apos;attend pour t&apos;accueillir.</p>
+            <div className="my-8 pt-6 border-t border-gold/20">
+                <strong className="block text-xl text-gold mb-2 font-cinzel">{t.community.title}</strong>
+                <p className="text-cream mb-6">{t.community.text}</p>
 
                 <a
-                    href="https://discord.com/invite/Wp5NKt56BX"
+                    href={t.community.link}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full text-center bg-[#5865F2] text-white font-bold text-lg px-6 py-4 rounded-xl hover:bg-[#4752c4] transition-all transform hover:-translate-y-0.5 shadow-lg"
                 >
-                    REJOINDRE LE SERVEUR DISCORD MAINTENANT 👾
+                    {t.community.cta}
                 </a>
             </div>
 
-            <p className="text-[#F4EBD0]/70 italic mt-4">
-                À tout de suite de l&apos;autre côté,<br />
-                <span className="font-bold text-[#d4af37]">Dilhan.</span>
+            <p className="text-cream/70 italic mt-4">
+                {t.signature.text}<br />
+                <span className="font-bold text-gold">{t.signature.name}</span>
             </p>
         </div>
     );

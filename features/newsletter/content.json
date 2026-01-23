@@ -1,0 +1,93 @@
+{
+  "newsletter": {
+    "header": {
+      "title": {
+        "start": "Ose enfin te lancer dans le Jeu de Rôle, découvre",
+        "highlight": "Daggerheart"
+      },
+      "subtitle": "Le système narratif et intuitif pour vivre des aventures épiques, même si tu n'as jamais lancé un dé de ta vie"
+    },
+    "painPoints": {
+      "title": "Tu as envie de jouer ou de masteriser, mais...",
+      "points": [
+        "Tu as peur de ne pas connaître les règles ?",
+        "La gestion des chiffres te stresse ?",
+        "Tu ne sais pas par où commencer ?"
+      ]
+    },
+    "solution": {
+      "title": "J'ai créé ce Kit de Démarrage pour toi.",
+      "p1": "Je suis [Dilhan](highlight), Maître du Jeu et Président de l'association [Dague de Cœur & Cie](italic). Avec [20 ans d'initiations au Jeu de Rôle](bold) au compteur, j'ai vu passer des centaines de joueurs débutants. Ma mission est simple : t'aider à jouer sans pression et avec bienveillance.",
+      "signature": "- Dilhan"
+    },
+    "benefits": {
+      "title": "Ensuite, en t'inscrivant, tu reçois immédiatement :",
+      "items": [
+        {
+          "title": "Le Guide de Démarrage Rapide",
+          "description": "Tout ce qu'il faut savoir pour jouer en 10 minutes chrono."
+        },
+        {
+          "title": "Une Aventure Prête à Jouer",
+          "description": "Un scénario d'introduction complet : 'L'Héritage du Cercle Doré'."
+        },
+        {
+          "title": "5 Personnages Prétirés",
+          "description": "Pour que tes joueurs puissent se lancer sans passer 2h à créer leur fiche."
+        },
+        {
+          "title": "Mes Conseils Exclusifs par Email",
+          "description": "Chaque semaine, une astuce pour améliorer ta narration et gérer ta table."
+        }
+      ]
+    },
+    "form": {
+      "title": "Rejoins la Confrérie",
+      "firstNamePlaceholder": "Ton Prénom",
+      "emailPlaceholder": "Ton Email",
+      "submitButton": {
+        "default": "Recevoir mon Kit Daggerheart",
+        "loading": "Envoi en cours..."
+      },
+      "disclaimer": "Promis, pas de spam. Juste de l'aventure. Désinscription en 1 clic."
+    },
+    "success": {
+      "title": "C'est fait !",
+      "message": "Ton Kit de Démarrage est en route vers ta boîte mail (vérifie tes spams, les gobelins les cachent parfois).",
+      "community": {
+        "title": "En attendant, ne reste pas seul !",
+        "text": "La communauté t'attend pour t'accueillir.",
+        "cta": "REJOINDRE LE SERVEUR DISCORD MAINTENANT 👾",
+        "link": "https://discord.com/invite/Wp5NKt56BX"
+      },
+      "signature": {
+          "text": "À tout de suite de l'autre côté,",
+          "name": "Dilhan."
+      }
+    },
+    "blog": {
+      "hero": {
+        "category": "Archives de la Confrérie",
+        "title": {
+          "line1": "La Gazette de",
+          "highlight": "Dague de Cœur"
+        },
+        "description": "Plongez dans les chroniques passées, découvrez des secrets oubliés et revivez l'évolution de notre aventure commune."
+      },
+      "card": {
+        "tag": "Newsletter",
+        "readMore": "Lire l'édition",
+        "unknownDate": "Date inconnue"
+      },
+      "empty": {
+         "title": "Le calme avant la tempête...",
+         "message": "Aucune newsletter n'a encore été envoyée."
+      },
+      "unlock": {
+         "title": "Débloque les Archives Secrètes",
+         "description": "Seuls les initiés ont accès à l'intégralité de nos chroniques. Inscris-toi gratuitement pour accéder à toutes les éditions passées et futures.",
+         "loading": "Ouverture des archives en cours..."
+      }
+    }
+  }
+}

@@ -23,28 +23,22 @@ export async function POST(request: NextRequest) {
     // 1. Add to list
     const contactResult = await brevo.addContactToList(email, firstName, BREVO_LIST_ID);
     
-    // Check if error is NOT "contact already exists" (which we treat as success for the user flow)
-    // Brevo returns "duplicate_parameter" or message containing "already exists" typically.
-    // We'll trust the adapter to return specific codes or just string match for now if adapter is generic.
-    // For now assuming any failure that isn't network crash might be worth logging but we want to let the user "login"
-    // IMPROVEMENT: We should check specifically for duplicate error. 
-    // Usually Brevo returns 400 for duplicates.
-    if (!contactResult.success) {
-        // If it's a "real" error (not just duplicate), we might want to stop. 
-        // But for this "paywall" feature, if they are already in the list, we generally want to let them through.
-        // So we log it but proceed to sending email (maybe they want the welcome email again?) 
-        // or just proceed to returning success.
-        console.warn("Add contact result:", contactResult.error);
-    }
-
-    // 2. Send transactional email (Welcome) - ONLY if it was a new signup? 
-    // Or send it anyway? The user might expect a confirmation.
-    // If they are already subscribed, Brevo might bounce it or they get it again.
-    // Let's attempt to send.
-    const emailResult = await brevo.sendTransactionalEmail(email, firstName, BREVO_TEMPLATE_ID);
-    if (!emailResult.success) {
-       console.error("Failed to send email:", emailResult.error);
-       // We don't fail the request here, main goal is "subscription/login"
+    // 2. Send transactional email (Welcome) - ONLY if it's a new signup
+    if (contactResult.success) {
+        const emailResult = await brevo.sendTransactionalEmail(email, firstName, BREVO_TEMPLATE_ID);
+        if (!emailResult.success) {
+           console.error("Failed to send email:", emailResult.error);
+        }
+    } else if (contactResult.code === "ALREADY_EXISTS") {
+        console.log("Contact already exists, skipping welcome email.");
+        // We consider this a success for the user (they get access)
+    } else {
+        // Real error
+        console.error("Add contact result:", contactResult.error);
+        return NextResponse.json(
+            { error: contactResult.error || "Failed to subscribe" },
+            { status: 500 }
+        );
     }
 
     // 3. Set Cookie and Return Success

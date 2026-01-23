@@ -1,11 +1,31 @@
+import content from "@/features/newsletter/content.json";
+
 export function BioSection() {
+    const t = content.newsletter.solution;
+
+    // A simple parser for the specific formatting we put in JSON
+    // [text](style) -> applies style class
+    const parseText = (text: string) => {
+        const parts = text.split(/(\[.*?\]\(.*?\))/g);
+        return parts.map((part, index) => {
+            const match = part.match(/^\[(.*?)\]\((.*?)\)$/);
+            if (match) {
+                const [, content, style] = match;
+                if (style === 'highlight') return <strong key={index} className="text-gold">{content}</strong>;
+                if (style === 'bold') return <strong key={index}>{content}</strong>;
+                if (style === 'italic') return <em key={index}>{content}</em>;
+            }
+            return part;
+        });
+    };
+
     return (
-        <div className="mt-8 mb-8 text-[#F4EBD0]/90 leading-relaxed font-serif">
+        <div className="mt-8 mb-8 text-cream/90 leading-relaxed font-serif">
             <p className="mb-4">
-                <strong className="block text-xl text-[#d4af37] mb-4">J&apos;ai créé ce Kit de Démarrage pour toi.</strong>
-                Je suis <strong className="text-[#d4af37]">Dilhan</strong>, Maître du Jeu et Président de l&apos;association <em>Dague de Cœur & Cie</em>. Avec <strong>20 ans d&apos;initiations au Jeu de Rôle</strong> au compteur, j&apos;ai vu passer des centaines de joueurs débutants. Ma mission est simple : t&apos;aider à jouer sans pression et avec bienveillance.
+                <strong className="block text-xl text-gold mb-4">{t.title}</strong>
+                {parseText(t.p1)}
             </p>
-            <p className="text-sm font-cinzel text-[#d4af37] mt-2">- Dilhan</p>
+            <p className="text-sm font-cinzel text-gold mt-2">{t.signature}</p>
         </div>
     );
 }

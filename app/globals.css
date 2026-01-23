@@ -3,6 +3,14 @@
 @theme {
   --font-cinzel: var(--font-cinzel);
   --font-lato: var(--font-lato);
+
+  --color-gold: #d4af37;
+  --color-gold-light: rgba(212,175,55,0.2);
+  --color-gold-hover: rgba(212,175,55,0.4);
+  --color-dark-blue: #1a1b4b;
+  --color-dark-blue-transparent: rgba(26,27,75,0.1);
+  --color-cream: #F4EBD0;
+  --color-red-hover: #b43232;
 }
 
 :root {
