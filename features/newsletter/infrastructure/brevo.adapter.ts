@@ -13,6 +13,22 @@ interface BrevoTransactionalEmail {
   params?: Record<string, string>;
 }
 
+export interface BrevoCampaign {
+  id: number;
+  name: string;
+  subject: string;
+  previewUrl: string;
+  htmlContent: string;
+  scheduledAt?: string;
+  createdAt: string;
+  sentDate?: string;
+}
+
+export interface BrevoCampaignsResponse {
+  campaigns: BrevoCampaign[];
+  count: number;
+}
+
 export class BrevoAdapter {
   private apiKey: string;
 
@@ -53,7 +69,7 @@ export class BrevoAdapter {
       }
 
       return { success: true };
-    } catch (error) {
+    } catch {
       return { success: false, error: "Network error" };
     }
   }
@@ -79,7 +95,69 @@ export class BrevoAdapter {
       }
 
       return { success: true };
-    } catch (error) {
+    } catch {
+      return { success: false, error: "Network error" };
+    }
+  }
+
+  /**
+   * Get sent email campaigns
+   */
+  async getSentCampaigns(
+    limit: number = 10,
+    offset: number = 0
+  ): Promise<{ success: boolean; data?: BrevoCampaignsResponse; error?: string }> {
+    try {
+      const params = new URLSearchParams({
+        status: "sent",
+        limit: limit.toString(),
+        offset: offset.toString(),
+        sort: "desc",
+      });
+
+      const response = await fetch(`${BREVO_API_URL}/emailCampaigns?${params}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": this.apiKey,
+        },
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        return { success: false, error: error.message || "Failed to fetch campaigns" };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch {
+      return { success: false, error: "Network error" };
+    }
+  }
+
+  /**
+   * Get a specific campaign
+   */
+  async getCampaign(
+    campaignId: number
+  ): Promise<{ success: boolean; data?: BrevoCampaign; error?: string }> {
+    try {
+      const response = await fetch(`${BREVO_API_URL}/emailCampaigns/${campaignId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": this.apiKey,
+        },
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        return { success: false, error: error.message || "Failed to fetch campaign" };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch {
       return { success: false, error: "Network error" };
     }
   }
