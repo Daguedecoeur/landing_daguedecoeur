@@ -46,7 +46,6 @@ export function Navbar() {
 
                     <nav className="hidden md:flex items-center gap-8 relative z-10">
                         {[
-                            { name: "NEWSLETTER", href: "/newsletter" },
                             { name: "BLOG", href: "/blog" }
                         ].map((link) => (
                             <Link
@@ -64,7 +63,7 @@ export function Navbar() {
                         ))}
                     </nav>
 
-       
+
                     <button
                         className="md:hidden relative z-10 text-[#F4EBD0] hover:text-[#d4af37] transition-colors"
                         onClick={() => setIsMobileMenuOpen(true)}
@@ -87,7 +86,6 @@ export function Navbar() {
                     <div className="flex flex-col items-center gap-8">
                         {[
                             { name: "ACCUEIL", href: "/" },
-                            { name: "NEWSLETTER", href: "/newsletter" },
                             { name: "BLOG", href: "/blog" }
                         ].map((link) => (
                             <Link
