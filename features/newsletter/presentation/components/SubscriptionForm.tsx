@@ -53,7 +53,7 @@ export function SubscriptionForm({ onSubmit, isLoading, errors }: SubscriptionFo
                 </button>
 
                 <p className="text-xs text-[#F4EBD0]/60 text-center italic">
-                    Pas de spam. Juste de l'aventure. Désinscription possible à tout moment.
+                    Pas de spam. Juste de l&apos;aventure. Désinscription possible à tout moment.
                 </p>
             </form>
         </div>

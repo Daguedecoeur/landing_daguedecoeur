@@ -1,27 +1,69 @@
 import { getBrevoAdapter } from "@/features/newsletter/infrastructure/brevo.adapter";
 import { NewsletterLayout } from "@/features/newsletter/presentation/NewsletterLayout";
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { UnlockBlog } from "./UnlockBlog";
+import Image from "next/image";
 
 export const dynamic = 'force-dynamic';
 
 export default async function BlogPage() {
     const brevo = getBrevoAdapter();
-    const { data } = await brevo.getSentCampaigns(50, 0);
+    const { data } = await brevo.getSentCampaigns(50, 0); 
     const campaigns = data?.campaigns || [];
+
+    campaigns.sort((a, b) => {
+        const dateA = a.sentDate ? new Date(a.sentDate).getTime() : 0;
+        const dateB = b.sentDate ? new Date(b.sentDate).getTime() : 0;
+        return dateB - dateA;
+    });
+
+    const cookieStore = await cookies();
+    const isUnlocked = cookieStore.has("dague_newsletter_auth");
+
+    const isLocked = !isUnlocked && campaigns.length > 4;
+
+    const visibleLimit = 4;
+    const visibleCampaigns = isLocked ? campaigns.slice(0, visibleLimit) : campaigns;
+    const teaserCampaigns = isLocked ? campaigns.slice(visibleLimit, visibleLimit + 4) : [];
 
     return (
         <NewsletterLayout>
-            <div className="mb-12 text-center">
-                <h1 className="text-4xl lg:text-5xl font-cinzel text-[#d4af37] mb-4">
-                    La Gazette de Dague de Cœur
-                </h1>
-                <p className="text-lg text-[#F4EBD0]/80 max-w-2xl mx-auto">
-                    Retrouvez toutes nos précédentes éditions et plongez dans l&apos;univers de Daggerheart.
-                </p>
+            <div className="relative w-full h-[400px] mb-16 rounded-xl overflow-hidden border border-[#d4af37] shadow-[0_0_50px_rgba(212,175,55,0.2)] group">
+                <Image
+                    src="/images/blog-hero.png"
+                    alt="Daggerheart Universe"
+                    fill
+                    className="object-cover transform group-hover:scale-105 transition-transform duration-700"
+                    priority
+                />
+
+                {/* Gradient Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#1a1b4b] via-[#1a1b4b]/80 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1a1b4b] to-transparent opacity-80"></div>
+
+                {/* Content */}
+                <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-16 max-w-4xl">
+                    <span className="text-[#d4af37] font-cinzel tracking-[0.2em] text-sm md:text-base mb-4 uppercase animate-fade-in">
+                        Archives de la Confrérie
+                    </span>
+                    <h1 className="text-4xl md:text-6xl font-cinzel text-white mb-6 leading-tight drop-shadow-lg">
+                        La Gazette de <br />
+                        <span className="text-[#d4af37]">Dague de Cœur</span>
+                    </h1>
+                    <p className="text-lg text-[#F4EBD0]/90 max-w-xl font-lato leading-relaxed drop-shadow-md">
+                        Plongez dans les chroniques passées, découvrez des secrets oubliés et revivez l&apos;évolution de notre aventure commune.
+                    </p>
+                </div>
+
+                {/* Decorative border embellishment */}
+                <div className="absolute bottom-4 right-4 w-16 h-16 border-b-2 border-r-2 border-[#d4af37]/50 rounded-br-lg"></div>
+                <div className="absolute top-4 left-4 w-16 h-16 border-t-2 border-l-2 border-[#d4af37]/50 rounded-tl-lg"></div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                {campaigns.map((campaign) => (
+            {/* Grid Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left mb-8">
+                {visibleCampaigns.map((campaign) => (
                     <Link
                         key={campaign.id}
                         href={`/blog/${campaign.id}`}
@@ -57,6 +99,37 @@ export default async function BlogPage() {
                 ))}
             </div>
 
+            {isLocked && (
+                <div className="relative mb-16">
+                    {/* Teaser Background (Blurred items) */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left opacity-30 select-none pointer-events-none blur-sm filter grayscale">
+                        {teaserCampaigns.map((campaign) => (
+                            <div
+                                key={campaign.id}
+                                className="flex flex-col h-full bg-[#F4EBD0] border-2 border-[#d4af37] rounded-lg overflow-hidden p-6"
+                            >
+                                <div className="flex justify-between items-center mb-4 border-b border-[#1a1b4b]/10 pb-4">
+                                    <span className="text-[#1a1b4b]/70 text-sm font-cinzel font-semibold">
+                                        {campaign.sentDate ? new Date(campaign.sentDate).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long', year: 'numeric' }) : 'Date inconnue'}
+                                    </span>
+                                </div>
+                                <h2 className="text-2xl font-cinzel text-[#1a1b4b] mb-4 leading-tight font-bold">
+                                    {campaign.subject}
+                                </h2>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Overlay Gradient + CTA */}
+                    <div className="absolute inset-0 flex items-center justify-center z-20">
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1b4b] via-[#1a1b4b]/60 to-transparent"></div>
+                        <div className="w-full max-w-2xl px-4 mt-8 md:mt-0 relative z-30">
+                            <UnlockBlog />
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {campaigns.length === 0 && (
                 <div className="text-center py-24 border-2 border-[#d4af37]/30 rounded-lg bg-[#1a1b4b]/50">
                     <p className="text-[#F4EBD0] text-xl font-cinzel mb-2">Le calme avant la tempête...</p>
@@ -64,11 +137,7 @@ export default async function BlogPage() {
                 </div>
             )}
 
-            <div className="mt-16 text-center">
-                <Link href="/newsletter" className="inline-block px-8 py-3 border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#1a1b4b] transition-all duration-300 font-cinzel text-sm uppercase tracking-widest">
-                    S&apos;abonner à la newsletter
-                </Link>
-            </div>
+            {/* Removed Footer Link as requested */}
         </NewsletterLayout>
     );
 }

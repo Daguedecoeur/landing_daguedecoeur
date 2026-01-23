@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Cinzel, Lato } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
+import { Navbar } from "./components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel" });
@@ -78,6 +79,7 @@ export default function RootLayout({
       <body
         className={`${lato.className} antialiased`}
       >
+        <Navbar />
         {children}
       </body>
     </html>

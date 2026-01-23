@@ -26,7 +26,6 @@ export default function NewsletterView() {
 
     return (
         <NewsletterLayout>
-            {/* LIGNE 1: 2 colonnes - Titre/Sous-titre + Image */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto mb-12">
                 <NewsletterHeader />
 
@@ -57,13 +56,13 @@ export default function NewsletterView() {
                 <BioSection />
             </div>
 
-            <GoldSeparator />  
+            <GoldSeparator />
 
             <div className="max-w-6xl mx-auto m-12">
                 <BenefitsSection />
             </div>
 
-            <div className="max-w-2xl mx-auto">
+            <div className="max-w-2xl mx-auto" id="subscribe">
                 {!isSuccess ? (
                     <SubscriptionForm
                         onSubmit={handleSubmit}
