@@ -78,6 +78,33 @@ export default function RootLayout({
           `}
         </Script>
       </head>
+      <Script
+        id="json-ld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "WebSite",
+                "name": "Dague de Coeur",
+                "url": "https://daguedecoeur.fr/",
+                "description": "Communauté Française Daggerheart",
+                "inLanguage": "fr-FR"
+              },
+              {
+                "@type": "Organization",
+                "name": "Dague de Coeur",
+                "url": "https://daguedecoeur.fr/",
+                "logo": "https://daguedecoeur.fr/images/og-image.png",
+                "sameAs": [
+                  "https://discord.gg/daguedecoeur"
+                ]
+              }
+            ]
+          })
+        }}
+      />
       <body
         className={`${lato.className} antialiased`}
       >

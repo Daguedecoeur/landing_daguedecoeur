@@ -22,7 +22,7 @@ export function BioSection() {
     return (
         <div className="mt-8 mb-8 text-cream/90 leading-relaxed font-serif">
             <p className="mb-4">
-                <strong className="block text-xl text-gold mb-4">{t.title}</strong>
+                <h3 className="block text-xl text-gold mb-4 font-bold">{t.title}</h3>
                 {parseText(t.p1)}
             </p>
             <p className="text-sm font-cinzel text-gold mt-2">{t.signature}</p>
