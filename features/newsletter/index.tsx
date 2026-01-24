@@ -20,6 +20,8 @@ export default function NewsletterView() {
         const data = {
             firstName: formData.get("firstName"),
             email: formData.get("email"),
+            acquisitionChannel: formData.get("acquisitionChannel"),
+            acquisitionChannelOther: formData.get("acquisitionChannelOther") || undefined,
         };
         subscribe(data);
     };
@@ -35,8 +37,8 @@ export default function NewsletterView() {
                         <div className="absolute inset-0 border-2 border-[#d4af37] -rotate-3 opacity-30 rounded-lg"></div>
                         <div className="relative h-full w-full rounded-lg overflow-hidden border border-[#d4af37] shadow-[0_0_30px_rgba(212,175,55,0.1)]">
                             <Image
-                                src="/images/hero-bg.png"
-                                alt="Daggerheart Atmosphere"
+                                src="/images/Ecran-Fr-Daggerheart.jpg"
+                                alt="Ecran du MJ Daggerheart par Pierre Ignaszewski"
                                 fill
                                 className="object-cover"
                             />
@@ -47,6 +49,9 @@ export default function NewsletterView() {
                                 <div className="w-8 h-8 border-b-4 border-l-4 border-[#d4af37]" />
                             </div>
                         </div>
+                        <p className="text-center text-[#F4EBD0]/60 text-xs mt-4 italic font-cinzel">
+                            Illustration : Pierre Ignaszewski, illustrateur de l’écran du MJ officiel (version française)
+                        </p>
                     </div>
                 </div>
             </div>

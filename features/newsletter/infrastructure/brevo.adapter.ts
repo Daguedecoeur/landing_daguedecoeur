@@ -55,12 +55,13 @@ export class BrevoAdapter implements NewsletterRepository {
   async addContactToList(
     email: string,
     firstName: string,
-    listId: number
+    listId: number,
+    customAttributes?: Record<string, string>
   ): Promise<{ success: boolean; error?: string; code?: "ALREADY_EXISTS" | "UNKNOWN" }> {
     try {
       const response = await this.request<BrevoContact>("/contacts", {
         email,
-        attributes: { firstname: firstName },
+        attributes: { firstname: firstName, ...customAttributes },
         listIds: [listId],
         updateEnabled: true,
       });

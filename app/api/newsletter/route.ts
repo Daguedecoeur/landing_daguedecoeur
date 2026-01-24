@@ -17,11 +17,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { email, firstName } = result.data;
+    const { email, firstName, acquisitionChannel, acquisitionChannelOther } = result.data;
     const brevo = getBrevoAdapter();
 
-    // 1. Add to list
-    const contactResult = await brevo.addContactToList(email, firstName, BREVO_LIST_ID);
+    // Determine the final acquisition channel value
+    const acquisitionValue = acquisitionChannel === "Autre" && acquisitionChannelOther
+      ? `Autre: ${acquisitionChannelOther}`
+      : acquisitionChannel;
+
+    // 1. Add to list with acquisition channel attribute
+    const contactResult = await brevo.addContactToList(email, firstName, BREVO_LIST_ID, {
+      ACQUISITION_CHANNEL: acquisitionValue,
+    });
     
     // 2. Send transactional email (Welcome) - ONLY if it's a new signup
     if (contactResult.success) {
