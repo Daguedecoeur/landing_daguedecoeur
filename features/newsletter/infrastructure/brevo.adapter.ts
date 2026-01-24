@@ -125,6 +125,7 @@ export class BrevoAdapter implements NewsletterRepository {
            "Content-Type": "application/json",
            "api-key": this.apiKey,
          },
+         next: { revalidate: 3600 },
        });
  
        if (!response.ok) {
@@ -164,6 +165,7 @@ export class BrevoAdapter implements NewsletterRepository {
           "Content-Type": "application/json",
           "api-key": this.apiKey,
         },
+        next: { revalidate: 3600 },
       });
 
       if (!response.ok) {
