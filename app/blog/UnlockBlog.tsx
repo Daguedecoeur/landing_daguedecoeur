@@ -19,7 +19,7 @@ export function UnlockBlog() {
             firstName: formData.get("firstName"),
             email: formData.get("email"),
             acquisitionChannel: formData.get("acquisitionChannel"),
-            acquisitionChannelOther: formData.get("acquisitionChannelOther"),
+            acquisitionChannelOther: formData.get("acquisitionChannelOther") || undefined,
         };
         subscribe(data);
     };
