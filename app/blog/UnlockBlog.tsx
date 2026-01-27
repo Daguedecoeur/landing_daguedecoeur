@@ -18,6 +18,8 @@ export function UnlockBlog() {
         const data = {
             firstName: formData.get("firstName"),
             email: formData.get("email"),
+            acquisitionChannel: formData.get("acquisitionChannel"),
+            acquisitionChannelOther: formData.get("acquisitionChannelOther"),
         };
         subscribe(data);
     };
