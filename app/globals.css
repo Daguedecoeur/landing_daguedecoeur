@@ -18,10 +18,18 @@
   --foreground: #171717;
 }
 
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
+  min-height: 100%;
   overflow-x: hidden;
+  overflow-y: visible;
   background-color: #1a1b4b;
   color: #ffffff;
 }
