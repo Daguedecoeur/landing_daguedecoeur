@@ -5,7 +5,7 @@ import { SubscriptionForm } from "@/features/newsletter/presentation/components/
 import { SuccessMessage } from "@/features/newsletter/presentation/SuccessMessage";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import type { SuccessContent } from "@/features/newsletter/domain/homepage-content.model";
+import type { SuccessContent, FormContent } from "@/features/newsletter/domain/homepage-content.model";
 
 // Default success content for the unlock blog flow
 // This will be replaced when blog page also fetches from Payload
@@ -31,14 +31,27 @@ const defaultUnlockContent = {
     loading: "Ouverture des archives en cours...",
 };
 
+const defaultFormContent: FormContent = {
+    title: "Prêt à écrire ta propre légende ?",
+    subtitle: "Reçois ton accès par email dans la minute.",
+    firstNamePlaceholder: "Ton Prénom",
+    emailPlaceholder: "Ton Email",
+    acquisitionChannelLabel: "Comment es-tu tombé sur daguedecoeur.fr ?",
+    submitButtonDefault: "TÉLÉCHARGER MON KIT & REJOINDRE LE DISCORD 🚀",
+    submitButtonLoading: "Envoi en cours...",
+    disclaimer: "Pas de spam. Juste de l'aventure. Désinscription possible à tout moment.",
+};
+
 interface UnlockBlogProps {
     unlockContent?: typeof defaultUnlockContent;
     successContent?: SuccessContent;
+    formContent?: FormContent;
 }
 
 export function UnlockBlog({
     unlockContent = defaultUnlockContent,
     successContent = defaultSuccessContent,
+    formContent = defaultFormContent,
 }: UnlockBlogProps) {
     const { subscribe, isLoading, errors, isSuccess } = useNewsletterSubscription();
     const router = useRouter();
@@ -86,6 +99,7 @@ export function UnlockBlog({
                         onSubmit={handleSubmit}
                         isLoading={isLoading}
                         errors={errors}
+                        formContent={formContent}
                     />
                 ) : (
                     <div className="py-8">
