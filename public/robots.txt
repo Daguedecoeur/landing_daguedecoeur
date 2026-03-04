@@ -10,7 +10,3 @@ Disallow: /api/*
 
 # Sitemap
 Sitemap: https://daguedecoeur.fr/sitemap.xml
-
-# LLMs
-# https://llmstxt.org
-LLMs-full.txt: https://daguedecoeur.fr/llms-full.txt

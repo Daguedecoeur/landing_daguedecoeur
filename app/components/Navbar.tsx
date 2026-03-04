@@ -90,6 +90,7 @@ export function Navbar({
                     <button
                         className="md:hidden relative z-10 text-[#F4EBD0] hover:text-[#d4af37] transition-colors"
                         onClick={() => setIsMobileMenuOpen(true)}
+                        aria-label="Ouvrir le menu de navigation"
                     >
                         <Menu className="w-6 h-6" />
                     </button>
@@ -102,6 +103,7 @@ export function Navbar({
                     <button
                         onClick={() => setIsMobileMenuOpen(false)}
                         className="absolute top-8 right-8 text-[#F4EBD0]/70 hover:text-[#d4af37] transition-colors"
+                        aria-label="Fermer le menu de navigation"
                     >
                         <X className="w-8 h-8" />
                     </button>

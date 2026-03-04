@@ -17,7 +17,7 @@ export function NewsletterLayout({ children }: NewsletterLayoutProps) {
 
                 <GoldSeparator />
 
-                <footer className="text-center text-[#d4af37]/60 text-sm pb-8 font-cinzel">
+                <footer className="text-center text-[#d4af37]/80 text-sm pb-8 font-cinzel">
                     © {new Date().getFullYear()} Dague de Cœur. Inspiré par l&apos;univers de Daggerheart.
                 </footer>
             </div>
