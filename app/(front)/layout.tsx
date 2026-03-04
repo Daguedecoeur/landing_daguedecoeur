@@ -5,6 +5,8 @@ import Script from "next/script";
 import { Navbar } from "./../components/Navbar";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { getPayload } from "payload";
+import configPromise from "@payload-config";
 
 const inter = Inter({ subsets: ["latin"] });
 const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel" });
@@ -56,11 +58,33 @@ export const metadata: Metadata = {
   }
 };
 
-export default function RootLayout({
+async function getNavbarData() {
+  try {
+    const payload = await getPayload({ config: configPromise });
+    const data = await payload.findGlobal({ slug: "navbar" });
+    return {
+      siteName: data.siteName || undefined,
+      menuItems: (data.menuItems ?? []).map((item: { label: string; href: string }) => ({
+        label: item.label,
+        href: item.href,
+      })),
+      mobileMenuItems: (data.mobileMenuItems ?? []).map((item: { label: string; href: string }) => ({
+        label: item.label,
+        href: item.href,
+      })),
+    };
+  } catch {
+    return {};
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const navbarData = await getNavbarData();
+
   return (
     <html lang="fr" className={`${cinzel.variable} ${lato.variable}`}>
       <head>
@@ -108,7 +132,7 @@ export default function RootLayout({
       <body
         className={`${lato.className} antialiased`}
       >
-        <Navbar />
+        <Navbar {...navbarData} />
         {children}
         <Analytics />
         <SpeedInsights />
@@ -116,3 +140,4 @@ export default function RootLayout({
     </html>
   );
 }
+

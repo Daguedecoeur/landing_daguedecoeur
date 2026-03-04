@@ -11,7 +11,28 @@ function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-export function Navbar() {
+interface NavLink {
+    label: string;
+    href: string;
+}
+
+interface NavbarProps {
+    siteName?: string;
+    menuItems?: NavLink[];
+    mobileMenuItems?: NavLink[];
+}
+
+const defaultMenuItems: NavLink[] = [{ label: "BLOG", href: "/blog" }];
+const defaultMobileMenuItems: NavLink[] = [
+    { label: "ACCUEIL", href: "/" },
+    { label: "BLOG", href: "/blog" },
+];
+
+export function Navbar({
+    siteName = "DAGUE DE CŒUR",
+    menuItems = defaultMenuItems,
+    mobileMenuItems = defaultMobileMenuItems,
+}: NavbarProps) {
     const pathname = usePathname();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -20,6 +41,10 @@ export function Navbar() {
         if (path !== "/" && pathname?.startsWith(path)) return true;
         return false;
     };
+
+    const effectiveMobileItems = mobileMenuItems.length > 0
+        ? mobileMenuItems
+        : [{ label: "ACCUEIL", href: "/" }, ...menuItems];
 
     return (
         <>
@@ -40,16 +65,14 @@ export function Navbar() {
                             <Sword className="w-5 h-5 md:w-6 md:h-6 rotate-45" />
                         </div>
                         <span className="font-cinzel font-bold text-lg md:text-xl text-[#F4EBD0] tracking-widest transition-colors group-hover:text-[#d4af37] drop-shadow-sm">
-                            DAGUE DE CŒUR
+                            {siteName}
                         </span>
                     </Link>
 
                     <nav className="hidden md:flex items-center gap-8 relative z-10">
-                        {[
-                            { name: "BLOG", href: "/blog" }
-                        ].map((link) => (
+                        {menuItems.map((link) => (
                             <Link
-                                key={link.name}
+                                key={link.href}
                                 href={link.href}
                                 className={cn(
                                     "font-cinzel font-semibold text-sm tracking-widest transition-all duration-300",
@@ -58,7 +81,7 @@ export function Navbar() {
                                         : "text-[#F4EBD0]/70 hover:text-[#d4af37]"
                                 )}
                             >
-                                {link.name}
+                                {link.label}
                             </Link>
                         ))}
                     </nav>
@@ -84,12 +107,9 @@ export function Navbar() {
                     </button>
 
                     <div className="flex flex-col items-center gap-8">
-                        {[
-                            { name: "ACCUEIL", href: "/" },
-                            { name: "BLOG", href: "/blog" }
-                        ].map((link) => (
+                        {effectiveMobileItems.map((link) => (
                             <Link
-                                key={link.name}
+                                key={link.href}
                                 href={link.href}
                                 onClick={() => setIsMobileMenuOpen(false)}
                                 className={cn(
@@ -99,7 +119,7 @@ export function Navbar() {
                                         : "text-[#F4EBD0]/70 hover:text-[#d4af37]"
                                 )}
                             >
-                                {link.name}
+                                {link.label}
                             </Link>
                         ))}
                     </div>
@@ -108,3 +128,4 @@ export function Navbar() {
         </>
     );
 }
+

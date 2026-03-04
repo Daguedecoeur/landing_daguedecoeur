@@ -14,6 +14,7 @@ import { Media } from './cms/collections/Media'
 // Globals
 import { Homepage } from './cms/globals/Homepage'
 import { SiteSettings } from './cms/globals/SiteSettings'
+import { Navbar } from './cms/globals/Navbar'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -27,7 +28,7 @@ export default buildConfig({
   },
 
   collections: [Users, Articles, Media],
-  globals: [Homepage, SiteSettings],
+  globals: [Homepage, SiteSettings, Navbar],
 
   editor: lexicalEditor(),
 
