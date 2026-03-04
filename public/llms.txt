@@ -1,0 +1,20 @@
+# Dague de Coeur
+
+> Communauté française dédiée à Daggerheart, le jeu de rôle narratif de Darrington Press / Critical Role.
+
+Dague de Coeur est une association francophone qui aide les joueurs débutants et confirmés à découvrir et pratiquer Daggerheart. Le site propose un Kit de Démarrage gratuit (règles simplifiées, scénario, personnages prétirés), un blog avec les newsletters archivées, et un lien vers le serveur Discord communautaire.
+
+## Pages principales
+
+- [Accueil](https://daguedecoeur.fr/): Landing page avec présentation de Daggerheart, formulaire d'inscription au Kit de Démarrage gratuit.
+- [Blog](https://daguedecoeur.fr/blog): Archives des newsletters de la communauté (La Gazette de Dague de Cœur).
+
+## Liens utiles
+
+- [Discord](https://discord.com/invite/Wp5NKt56BX): Serveur Discord de la communauté.
+
+## Informations complémentaires
+
+- Langue : Français
+- Thématique : Jeu de rôle (JDR/RPG), Daggerheart, Critical Role, Darrington Press
+- Public : Joueurs francophones débutants et confirmés

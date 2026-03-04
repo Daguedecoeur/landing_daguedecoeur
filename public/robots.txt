@@ -1,9 +1,16 @@
 # robots.txt pour Dague de Coeur
+# https://daguedecoeur.fr
+
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /api
+Disallow: /api/*
 
 # Sitemap
 Sitemap: https://daguedecoeur.fr/sitemap.xml
 
-# Optimisation du crawl
-Crawl-delay: 1
+# LLMs
+# https://llmstxt.org
+LLMs-full.txt: https://daguedecoeur.fr/llms-full.txt

@@ -5,6 +5,37 @@ import { cookies } from "next/headers";
 import { UnlockBlog } from "./UnlockBlog";
 import Image from "next/image";
 import { GetSentCampaignsUseCase } from "@/features/newsletter/application/get-sent-campaigns.use-case";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Blog - La Gazette de Dague de Cœur",
+    description: "Les archives des newsletters de la communauté francophone Daggerheart. Chroniques, conseils de MJ, actualités et ressources pour joueurs débutants et confirmés.",
+    openGraph: {
+        type: "website",
+        url: "https://daguedecoeur.fr/blog",
+        title: "Blog - La Gazette de Dague de Cœur",
+        description: "Les archives des newsletters de la communauté francophone Daggerheart. Chroniques, conseils et ressources.",
+        images: [
+            {
+                url: "https://daguedecoeur.fr/images/og-image.png",
+                width: 1200,
+                height: 630,
+                alt: "Dague de Coeur - La Gazette",
+            },
+        ],
+        locale: "fr_FR",
+        siteName: "Dague de Coeur",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Blog - La Gazette de Dague de Cœur",
+        description: "Les archives des newsletters de la communauté francophone Daggerheart.",
+        images: ["https://daguedecoeur.fr/images/og-image.png"],
+    },
+    alternates: {
+        canonical: "https://daguedecoeur.fr/blog",
+    },
+};
 
 export const dynamic = 'force-dynamic';
 

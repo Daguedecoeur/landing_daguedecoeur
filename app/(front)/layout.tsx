@@ -102,8 +102,7 @@ export default async function RootLayout({
           `}
         </Script>
       </head>
-      <Script
-        id="json-ld"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
@@ -111,18 +110,57 @@ export default async function RootLayout({
             "@graph": [
               {
                 "@type": "WebSite",
+                "@id": "https://daguedecoeur.fr/#website",
                 "name": "Dague de Coeur",
                 "url": "https://daguedecoeur.fr/",
-                "description": "Communauté Française Daggerheart",
-                "inLanguage": "fr-FR"
+                "description": "Communauté Française Daggerheart — Le jeu de rôle narratif de Darrington Press / Critical Role",
+                "inLanguage": "fr-FR",
+                "publisher": {
+                  "@id": "https://daguedecoeur.fr/#organization"
+                }
               },
               {
                 "@type": "Organization",
+                "@id": "https://daguedecoeur.fr/#organization",
                 "name": "Dague de Coeur",
+                "alternateName": "Dague de Cœur & Cie",
                 "url": "https://daguedecoeur.fr/",
-                "logo": "https://daguedecoeur.fr/images/og-image.png",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://daguedecoeur.fr/images/og-image.png",
+                  "width": 1200,
+                  "height": 630
+                },
+                "description": "Association francophone dédiée à Daggerheart. Nous aidons les joueurs débutants et confirmés à découvrir et pratiquer le jeu de rôle narratif.",
+                "founder": {
+                  "@type": "Person",
+                  "name": "Dilhan"
+                },
                 "sameAs": [
-                  "https://discord.gg/daguedecoeur"
+                  "https://discord.com/invite/Wp5NKt56BX"
+                ],
+                "contactPoint": {
+                  "@type": "ContactPoint",
+                  "contactType": "community",
+                  "url": "https://discord.com/invite/Wp5NKt56BX"
+                }
+              },
+              {
+                "@type": "BreadcrumbList",
+                "@id": "https://daguedecoeur.fr/#breadcrumb",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Accueil",
+                    "item": "https://daguedecoeur.fr/"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://daguedecoeur.fr/blog"
+                  }
                 ]
               }
             ]

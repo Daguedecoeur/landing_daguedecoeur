@@ -1,0 +1,51 @@
+# Dague de Coeur — Documentation complète
+
+> Communauté française dédiée à Daggerheart, le jeu de rôle narratif de Darrington Press / Critical Role.
+
+## À propos
+
+Dague de Coeur est une association francophone fondée par Dilhan, Maître du Jeu avec 20 ans d'expérience en initiations au Jeu de Rôle. La mission de l'association est d'aider les joueurs à se lancer dans Daggerheart sans pression et avec bienveillance.
+
+Le site daguedecoeur.fr est une landing page communautaire qui permet aux visiteurs de :
+- Découvrir Daggerheart, un système de JDR narratif et intuitif créé par Darrington Press (Critical Role)
+- Télécharger un Kit de Démarrage gratuit comprenant :
+  - Un Guide de Démarrage Rapide (jouer en 10 minutes)
+  - Une Aventure Prête à Jouer : "L'Héritage du Cercle Doré"
+  - 5 Personnages Prétirés
+  - Des conseils exclusifs par email chaque semaine
+- Accéder aux archives des newsletters (La Gazette de Dague de Cœur)
+- Rejoindre le serveur Discord de la communauté
+
+## Structure du site
+
+### Page d'accueil (/)
+Landing page d'acquisition avec :
+- Présentation de Daggerheart et de ses avantages pour les débutants
+- Points de douleur adressés (peur des règles, gestion des chiffres, ne pas savoir par où commencer)
+- Bio du fondateur Dilhan
+- Liste des bénéfices du Kit de Démarrage
+- Formulaire d'inscription (prénom, email, canal d'acquisition)
+- Message de succès avec redirection Discord
+
+### Blog (/blog)
+Archives des newsletters envoyées via Brevo (anciennement Sendinblue). Les 4 premières éditions sont accessibles librement, les suivantes nécessitent une inscription (système de verrouillage par cookie).
+
+### Administration (/admin)
+Interface d'administration Payload CMS pour gérer le contenu du site (pages, articles, médias, navigation).
+
+## Stack technique
+
+- **Framework** : Next.js 16 (App Router)
+- **CMS** : Payload CMS 3.x (intégré dans Next.js)
+- **Base de données** : PostgreSQL (via @payloadcms/db-postgres)
+- **Stockage** : S3 (via @payloadcms/storage-s3)
+- **Newsletter** : Brevo API
+- **Hébergement** : Vercel
+- **Styling** : Tailwind CSS 4
+- **Typographies** : Cinzel (titres médiévaux), Lato (corps de texte)
+
+## Liens
+
+- Site : https://daguedecoeur.fr
+- Discord : https://discord.com/invite/Wp5NKt56BX
+- Langue : Français (fr-FR)
