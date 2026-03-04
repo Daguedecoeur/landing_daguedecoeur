@@ -10,8 +10,13 @@ import { SubscriptionForm } from "./presentation/components/SubscriptionForm";
 import { BenefitsSection } from "./presentation/components/BenefitsSection";
 import { SuccessMessage } from "./presentation/SuccessMessage";
 import { GoldSeparator } from "./presentation/components/GoldSeparator";
+import { HomepageContent } from "./domain/homepage-content.model";
 
-export default function NewsletterView() {
+interface NewsletterViewProps {
+    content: HomepageContent;
+}
+
+export default function NewsletterView({ content }: NewsletterViewProps) {
     const { subscribe, isLoading, errors, isSuccess } = useNewsletterSubscription();
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -29,7 +34,7 @@ export default function NewsletterView() {
     return (
         <NewsletterLayout>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto mb-12">
-                <NewsletterHeader />
+                <NewsletterHeader header={content.header} />
 
                 <div className="hidden lg:block relative">
                     <div className="relative aspect-square w-full max-w-md mx-auto">
@@ -50,15 +55,15 @@ export default function NewsletterView() {
                             </div>
                         </div>
                         <p className="text-center text-[#F4EBD0]/60 text-xs mt-4 italic font-cinzel">
-                            Illustration : Pierre Ignaszewski, illustrateur de l’écran du MJ officiel (version française)
+                            Illustration : Pierre Ignaszewski, illustrateur de l'écran du MJ officiel (version française)
                         </p>
                     </div>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto mb-6">
-                <PainPoints />
-                <BioSection />
+                <PainPoints painPoints={content.painPoints} />
+                <BioSection solution={content.solution} />
             </div>
 
             <GoldSeparator />
@@ -73,9 +78,10 @@ export default function NewsletterView() {
                         onSubmit={handleSubmit}
                         isLoading={isLoading}
                         errors={errors}
+                        formContent={content.form}
                     />
                 ) : (
-                    <SuccessMessage />
+                    <SuccessMessage success={content.success} />
                 )}
             </div>
         </NewsletterLayout>

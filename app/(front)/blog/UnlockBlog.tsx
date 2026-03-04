@@ -1,16 +1,47 @@
 "use client";
 
-import content from "@/features/newsletter/content.json";
 import { useNewsletterSubscription } from "@/features/newsletter/application/useNewsletterSubscription";
 import { SubscriptionForm } from "@/features/newsletter/presentation/components/SubscriptionForm";
 import { SuccessMessage } from "@/features/newsletter/presentation/SuccessMessage";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import type { SuccessContent } from "@/features/newsletter/domain/homepage-content.model";
 
-export function UnlockBlog() {
+// Default success content for the unlock blog flow
+// This will be replaced when blog page also fetches from Payload
+const defaultSuccessContent: SuccessContent = {
+    title: "C'est fait !",
+    message: "Ton Kit de Démarrage est en route vers ta boîte mail (vérifie tes spams, les gobelins les cachent parfois).",
+    community: {
+        title: "En attendant, ne reste pas seul !",
+        text: "La communauté t'attend pour t'accueillir.",
+        cta: "REJOINDRE LE SERVEUR DISCORD MAINTENANT 👾",
+        link: "https://discord.com/invite/Wp5NKt56BX",
+    },
+    signature: {
+        text: "À tout de suite de l'autre côté,",
+        name: "Dilhan.",
+    },
+};
+
+// Default blog unlock content
+const defaultUnlockContent = {
+    title: "Débloque les Archives Secrètes",
+    description: "Seuls les initiés ont accès à l'intégralité de nos chroniques. Inscris-toi gratuitement pour accéder à toutes les éditions passées et futures.",
+    loading: "Ouverture des archives en cours...",
+};
+
+interface UnlockBlogProps {
+    unlockContent?: typeof defaultUnlockContent;
+    successContent?: SuccessContent;
+}
+
+export function UnlockBlog({
+    unlockContent = defaultUnlockContent,
+    successContent = defaultSuccessContent,
+}: UnlockBlogProps) {
     const { subscribe, isLoading, errors, isSuccess } = useNewsletterSubscription();
     const router = useRouter();
-    const t = content.newsletter.blog;
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -44,10 +75,10 @@ export function UnlockBlog() {
 
             <div className="relative z-10 max-w-lg mx-auto">
                 <h3 className="text-3xl font-cinzel text-gold mb-4">
-                    {t.unlock.title}
+                    {unlockContent.title}
                 </h3>
                 <p className="text-cream/80 mb-8 font-lato">
-                    {t.unlock.description}
+                    {unlockContent.description}
                 </p>
 
                 {!isSuccess ? (
@@ -58,9 +89,9 @@ export function UnlockBlog() {
                     />
                 ) : (
                     <div className="py-8">
-                        <SuccessMessage />
+                        <SuccessMessage success={successContent} />
                         <p className="text-gold mt-4 text-sm animate-pulse">
-                            {t.unlock.loading}
+                            {unlockContent.loading}
                         </p>
                     </div>
                 )}

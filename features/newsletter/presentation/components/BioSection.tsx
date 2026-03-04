@@ -1,8 +1,12 @@
-import content from "@/features/newsletter/content.json";
+interface BioSectionProps {
+    solution: {
+        title: string;
+        bio: string;
+        signature: string;
+    };
+}
 
-export function BioSection() {
-    const t = content.newsletter.solution;
-
+export function BioSection({ solution }: BioSectionProps) {
     // A simple parser for the specific formatting we put in JSON
     // [text](style) -> applies style class
     const parseText = (text: string) => {
@@ -21,11 +25,11 @@ export function BioSection() {
 
     return (
         <div className="mt-8 mb-8 text-cream/90 leading-relaxed font-serif">
-            <p className="mb-4">
-                <h3 className="block text-xl text-gold mb-4 font-bold">{t.title}</h3>
-                {parseText(t.p1)}
-            </p>
-            <p className="text-sm font-cinzel text-gold mt-2">{t.signature}</p>
+            <div className="mb-4">
+                <h3 className="block text-xl text-gold mb-4 font-bold">{solution.title}</h3>
+                {parseText(solution.bio)}
+            </div>
+            <p className="text-sm font-cinzel text-gold mt-2">{solution.signature}</p>
         </div>
     );
 }

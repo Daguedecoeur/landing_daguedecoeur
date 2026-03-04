@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import NewsletterView from "@/features/newsletter";
+import { GetHomepageContentUseCase } from "@/features/newsletter/application/get-homepage-content.use-case";
+import { getPayloadHomepageAdapter } from "@/features/newsletter/infrastructure/payload-homepage.adapter";
 
 export const metadata: Metadata = {
   title: "Kit de Démarrage Daggerheart (VF) - Gratuit | Dague de Coeur",
@@ -11,6 +13,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
-  return <NewsletterView />;
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  // Composition Root (Manual Dependency Injection)
+  const repository = getPayloadHomepageAdapter();
+  const useCase = new GetHomepageContentUseCase(repository);
+  const content = await useCase.execute();
+
+  return <NewsletterView content={content} />;
 }
