@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Cinzel, Lato } from "next/font/google";
 import "./../globals.css";
 import Script from "next/script";
-import { Navbar } from "./../components/Navbar";
+import { Navbar } from "./../components/navbar";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getPayload } from "payload";
@@ -64,14 +64,6 @@ async function getNavbarData() {
     const data = await payload.findGlobal({ slug: "navbar" });
     return {
       siteName: data.siteName || undefined,
-      menuItems: (data.menuItems ?? []).map((item: { label: string; href: string }) => ({
-        label: item.label,
-        href: item.href,
-      })),
-      mobileMenuItems: (data.mobileMenuItems ?? []).map((item: { label: string; href: string }) => ({
-        label: item.label,
-        href: item.href,
-      })),
     };
   } catch {
     return {};
