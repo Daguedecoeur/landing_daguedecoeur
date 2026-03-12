@@ -1,8 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
 export const Homepage: GlobalConfig = {
-  slug: 'homepage',
-  label: 'Page d\'accueil',
+  slug: 'decouvre-daggerheart',
+  label: 'Découvre Daggerheart',
   fields: [
     // ── Header ──
     {

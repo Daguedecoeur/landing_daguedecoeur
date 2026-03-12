@@ -90,12 +90,12 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
-    homepage: Homepage;
+    'decouvre-daggerheart': DecouvreDaggerheart;
     'site-settings': SiteSetting;
     navbar: Navbar;
   };
   globalsSelect: {
-    homepage: HomepageSelect<false> | HomepageSelect<true>;
+    'decouvre-daggerheart': DecouvreDaggerheartSelect<false> | DecouvreDaggerheartSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     navbar: NavbarSelect<false> | NavbarSelect<true>;
   };
@@ -390,9 +390,9 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "homepage".
+ * via the `definition` "decouvre-daggerheart".
  */
-export interface Homepage {
+export interface DecouvreDaggerheart {
   id: number;
   header: {
     titleStart: string;
@@ -494,9 +494,9 @@ export interface Navbar {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "homepage_select".
+ * via the `definition` "decouvre-daggerheart_select".
  */
-export interface HomepageSelect<T extends boolean = true> {
+export interface DecouvreDaggerheartSelect<T extends boolean = true> {
   header?:
     | T
     | {

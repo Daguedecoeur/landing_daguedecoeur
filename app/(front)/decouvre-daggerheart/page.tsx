@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import HomepageView from "@/features/homepage";
+import NewsletterView from "@/features/newsletter";
 import { GetHomepageContentUseCase } from "@/features/newsletter/application/get-homepage-content.use-case";
 import { getPayloadHomepageAdapter } from "@/features/newsletter/infrastructure/payload-homepage.adapter";
 
@@ -15,10 +15,10 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default async function Home() {
+export default async function DecouvreDaggerheart() {
   const repository = getPayloadHomepageAdapter();
   const useCase = new GetHomepageContentUseCase(repository);
   const content = await useCase.execute();
 
-  return <HomepageView content={content} />;
+  return <NewsletterView content={content} />;
 }

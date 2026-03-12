@@ -3,6 +3,7 @@ import { Inter, Cinzel, Lato } from "next/font/google";
 import "./../globals.css";
 import Script from "next/script";
 import { Navbar } from "./../components/navbar";
+import { Footer } from "./../components/footer";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getPayload } from "payload";
@@ -164,6 +165,7 @@ export default async function RootLayout({
       >
         <Navbar {...navbarData} />
         {children}
+        <Footer />
         <Analytics />
         <SpeedInsights />
       </body>

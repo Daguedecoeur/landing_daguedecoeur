@@ -4,7 +4,7 @@ export const NAV_ITEMS: NavItem[] = [
     {
         label: "Découvre Daggerheart",
         emoji: "🎁",
-        href: "/#subscribe",
+        href: "/decouvre-daggerheart",
     },
     {
         label: "Ressources & Outils",

@@ -54,7 +54,7 @@ export class PayloadHomepageAdapter implements HomepageContentRepository {
   async getHomepageContent(): Promise<HomepageContent> {
     try {
       const payload = await getPayload({ config })
-      const data = await payload.findGlobal({ slug: 'homepage' })
+      const data = await payload.findGlobal({ slug: 'decouvre-daggerheart' })
 
       // If the Global has no real content yet, use fallback
       if (isContentEmpty(data as unknown as Record<string, unknown>)) {
