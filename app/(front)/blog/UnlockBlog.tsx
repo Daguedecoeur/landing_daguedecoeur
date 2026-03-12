@@ -6,9 +6,9 @@ import { SuccessMessage } from "@/features/newsletter/presentation/SuccessMessag
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import type { SuccessContent, FormContent } from "@/features/newsletter/domain/homepage-content.model";
+import { Card, CardContent } from "@/components/ui/card";
 
-// Default success content for the unlock blog flow
-// This will be replaced when blog page also fetches from Payload
+
 const defaultSuccessContent: SuccessContent = {
     title: "C'est fait !",
     message: "Ton Kit de Démarrage est en route vers ta boîte mail (vérifie tes spams, les gobelins les cachent parfois).",
@@ -79,37 +79,39 @@ export function UnlockBlog({
     }, [isSuccess, router]);
 
     return (
-        <div className="bg-dark-blue border-2 border-gold rounded-lg p-8 md:p-12 text-center shadow-[0_0_40px_var(--color-gold-light)] relative overflow-hidden">
+        <Card className="bg-deep-violet border-2 border-gold rounded-lg ring-0 shadow-[0_0_40px_var(--color-gold-light)] relative overflow-hidden">
             {/* Background decorative elements */}
             <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
                 <div className="absolute top-[-50px] left-[-50px] w-32 h-32 rounded-full bg-gold blur-3xl"></div>
                 <div className="absolute bottom-[-50px] right-[-50px] w-32 h-32 rounded-full bg-gold blur-3xl"></div>
             </div>
 
-            <div className="relative z-10 max-w-lg mx-auto">
-                <h3 className="text-3xl font-cinzel text-gold mb-4">
-                    {unlockContent.title}
-                </h3>
-                <p className="text-cream/80 mb-8 font-lato">
-                    {unlockContent.description}
-                </p>
+            <CardContent className="p-8 md:p-12 text-center relative z-10">
+                <div className="max-w-lg mx-auto">
+                    <h3 className="text-3xl font-cinzel text-gold mb-4">
+                        {unlockContent.title}
+                    </h3>
+                    <p className="text-cream/80 mb-8 font-lato">
+                        {unlockContent.description}
+                    </p>
 
-                {!isSuccess ? (
-                    <SubscriptionForm
-                        onSubmit={handleSubmit}
-                        isLoading={isLoading}
-                        errors={errors}
-                        formContent={formContent}
-                    />
-                ) : (
-                    <div className="py-8">
-                        <SuccessMessage success={successContent} />
-                        <p className="text-gold mt-4 text-sm animate-pulse">
-                            {unlockContent.loading}
-                        </p>
-                    </div>
-                )}
-            </div>
-        </div>
+                    {!isSuccess ? (
+                        <SubscriptionForm
+                            onSubmit={handleSubmit}
+                            isLoading={isLoading}
+                            errors={errors}
+                            formContent={formContent}
+                        />
+                    ) : (
+                        <div className="py-8">
+                            <SuccessMessage success={successContent} />
+                            <p className="text-gold mt-4 text-sm animate-pulse">
+                                {unlockContent.loading}
+                            </p>
+                        </div>
+                    )}
+                </div>
+            </CardContent>
+        </Card>
     );
 }

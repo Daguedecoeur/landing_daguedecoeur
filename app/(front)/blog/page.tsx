@@ -6,6 +6,8 @@ import { UnlockBlog } from "./UnlockBlog";
 import Image from "next/image";
 import { GetSentCampaignsUseCase } from "@/features/newsletter/application/get-sent-campaigns.use-case";
 import type { Metadata } from "next";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export const metadata: Metadata = {
     title: "Blog - La Gazette de Dague de Cœur",
@@ -68,8 +70,8 @@ export default async function BlogPage() {
                 />
 
                 {/* Gradient Overlays */}
-                <div className="absolute inset-0 bg-gradient-to-r from-dark-blue via-dark-blue/80 to-transparent"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue to-transparent opacity-80"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-deep-violet via-deep-violet/80 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-deep-violet to-transparent opacity-80"></div>
 
                 {/* Content */}
                 <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-16 max-w-4xl">
@@ -96,34 +98,36 @@ export default async function BlogPage() {
                     <Link
                         key={campaign.id}
                         href={`/blog/${campaign.id}`}
-                        className="group flex flex-col h-full bg-cream border-2 border-gold rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_0_25px_var(--color-gold-hover)] hover:-translate-y-1 relative"
+                        className="group flex flex-col h-full"
                     >
-                        {/* Corner decoration */}
-                        <div className="absolute top-0 right-0 p-2 opacity-50">
-                            <div className="w-4 h-4 border-t-2 border-r-2 border-dark-blue" />
-                        </div>
-
-                        <div className="p-6 flex-1 flex flex-col relative z-10">
-                            <div className="flex justify-between items-center mb-4 border-b border-dark-blue/10 pb-4">
-                                <span className="text-dark-blue/70 text-sm font-cinzel font-semibold">
-                                    {campaign.sentDate ? new Date(campaign.sentDate).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long', year: 'numeric' }) : 'Date inconnue'}
-                                </span>
-                                <span className="bg-dark-blue text-gold text-[10px] uppercase tracking-widest px-2 py-1 rounded">
-                                    Newsletter
-                                </span>
+                        <Card className="flex flex-col h-full bg-cream border-2 border-gold rounded-lg ring-0 overflow-hidden transition-all duration-300 hover:shadow-[0_0_25px_var(--color-gold-hover)] hover:-translate-y-1 relative">
+                            {/* Corner decoration */}
+                            <div className="absolute top-0 right-0 p-2 opacity-50">
+                                <div className="w-4 h-4 border-t-2 border-r-2 border-deep-violet" />
                             </div>
 
-                            <h2 className="text-2xl font-cinzel text-dark-blue mb-4 leading-tight font-bold group-hover:text-red-hover transition-colors">
-                                {campaign.subject}
-                            </h2>
+                            <CardContent className="p-6 flex-1 flex flex-col relative z-10">
+                                <div className="flex justify-between items-center mb-4 border-b border-deep-violet/10 pb-4">
+                                    <span className="text-deep-violet/70 text-sm font-cinzel font-semibold">
+                                        {campaign.sentDate ? new Date(campaign.sentDate).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long', year: 'numeric' }) : 'Date inconnue'}
+                                    </span>
+                                    <Badge className="bg-deep-violet text-gold text-[10px] uppercase tracking-widest rounded h-auto">
+                                        Newsletter
+                                    </Badge>
+                                </div>
 
-                            <div className="mt-auto pt-4 flex items-center text-dark-blue text-sm font-cinzel font-bold">
-                                <span className="border-b-2 border-gold pb-0.5 group-hover:border-red-hover transition-colors">Lire l&apos;édition</span>
-                                <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform text-gold group-hover:text-red-hover" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                </svg>
-                            </div>
-                        </div>
+                                <h2 className="text-2xl font-cinzel text-deep-violet mb-4 leading-tight font-bold group-hover:text-red-hover transition-colors">
+                                    {campaign.subject}
+                                </h2>
+
+                                <div className="mt-auto pt-4 flex items-center text-deep-violet text-sm font-cinzel font-bold">
+                                    <span className="border-b-2 border-gold pb-0.5 group-hover:border-red-hover transition-colors">Lire l&apos;édition</span>
+                                    <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform text-gold group-hover:text-red-hover" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                    </svg>
+                                </div>
+                            </CardContent>
+                        </Card>
                     </Link>
                 ))}
             </div>
@@ -133,25 +137,25 @@ export default async function BlogPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left opacity-30 select-none pointer-events-none blur-sm filter grayscale">
                         {teaserCampaigns.map((campaign) => (
-                            <div
+                            <Card
                                 key={campaign.id}
-                                className="flex flex-col h-full bg-cream border-2 border-gold rounded-lg overflow-hidden p-6"
+                                className="flex flex-col h-full bg-cream border-2 border-gold rounded-lg ring-0 overflow-hidden p-6"
                             >
-                                <div className="flex justify-between items-center mb-4 border-b border-dark-blue/10 pb-4">
-                                    <span className="text-dark-blue/70 text-sm font-cinzel font-semibold">
+                                <div className="flex justify-between items-center mb-4 border-b border-deep-violet/10 pb-4">
+                                    <span className="text-deep-violet/70 text-sm font-cinzel font-semibold">
                                         {campaign.sentDate ? new Date(campaign.sentDate).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long', year: 'numeric' }) : 'Date inconnue'}
                                     </span>
                                 </div>
-                                <h2 className="text-2xl font-cinzel text-dark-blue mb-4 leading-tight font-bold">
+                                <h2 className="text-2xl font-cinzel text-deep-violet mb-4 leading-tight font-bold">
                                     {campaign.subject}
                                 </h2>
-                            </div>
+                            </Card>
                         ))}
                     </div>
 
                     {/* Overlay Gradient + CTA */}
                     <div className="absolute inset-0 flex items-center justify-center z-20">
-                        <div className="absolute inset-0 bg-gradient-to-t from-dark-blue via-dark-blue/60 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-deep-violet via-deep-violet/60 to-transparent"></div>
                         <div className="w-full max-w-2xl px-4 mt-8 md:mt-0 relative z-30">
                             <UnlockBlog />
                         </div>
@@ -160,10 +164,12 @@ export default async function BlogPage() {
             )}
 
             {campaigns.length === 0 && (
-                <div className="text-center py-24 border-2 border-gold/30 rounded-lg bg-dark-blue/50">
-                    <p className="text-cream text-xl font-cinzel mb-2">Le calme avant la tempête...</p>
-                    <p className="text-cream/60">Aucune newsletter n&apos;a encore été envoyée.</p>
-                </div>
+                <Card className="text-center py-24 border-2 border-gold/30 bg-deep-violet/50 rounded-lg ring-0">
+                    <CardContent>
+                        <p className="text-cream text-xl font-cinzel mb-2">Le calme avant la tempête...</p>
+                        <p className="text-cream/60">Aucune newsletter n&apos;a encore été envoyée.</p>
+                    </CardContent>
+                </Card>
             )}
 
         </NewsletterLayout>
