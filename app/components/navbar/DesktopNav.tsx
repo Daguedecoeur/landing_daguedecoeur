@@ -9,11 +9,13 @@ import {
     NavigationMenuList,
     NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import type { NavItem, NavSubItem } from "./navbar.types";
+import type { NavItem, NavSubItem } from "@/features/navigation/domain/navigation.model";
 
 interface DesktopNavProps {
     items: NavItem[];
     isActive: (path: string) => boolean;
+    ctaLabel: string;
+    ctaHref: string;
 }
 
 function DesktopDropdownItem({ item }: { item: NavSubItem }) {
@@ -43,7 +45,7 @@ function DesktopDropdownItem({ item }: { item: NavSubItem }) {
     );
 }
 
-export function DesktopNav({ items, isActive }: DesktopNavProps) {
+export function DesktopNav({ items, isActive, ctaLabel, ctaHref }: DesktopNavProps) {
     return (
         <>
             <NavigationMenu className="hidden lg:flex" viewport={true}>
@@ -99,7 +101,7 @@ export function DesktopNav({ items, isActive }: DesktopNavProps) {
                 asChild
                 className="hidden lg:inline-flex bg-gold text-deep-violet font-cinzel font-bold text-xs h-9 rounded-full px-5 hover:bg-gold/80 shadow-[0_0_15px_rgba(212,175,55,0.3)] hover:-translate-y-0.5 transition-all"
             >
-                <Link href="/#subscribe">Espace Membre</Link>
+                <Link href={ctaHref}>{ctaLabel}</Link>
             </Button>
         </>
     );

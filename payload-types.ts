@@ -91,11 +91,13 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     'decouvre-daggerheart': DecouvreDaggerheart;
+    homepage: Homepage;
     'site-settings': SiteSetting;
     navbar: Navbar;
   };
   globalsSelect: {
     'decouvre-daggerheart': DecouvreDaggerheartSelect<false> | DecouvreDaggerheartSelect<true>;
+    homepage: HomepageSelect<false> | HomepageSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     navbar: NavbarSelect<false> | NavbarSelect<true>;
   };
@@ -188,6 +190,15 @@ export interface Article {
   coverImage?: (number | null) | Media;
   publishedAt?: string | null;
   category?: ('newsletter' | 'ressource' | 'actualite' | 'guide') | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -326,6 +337,14 @@ export interface ArticlesSelect<T extends boolean = true> {
   coverImage?: T;
   publishedAt?: T;
   category?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -394,13 +413,13 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface DecouvreDaggerheart {
   id: number;
-  header: {
-    titleStart: string;
-    titleHighlight: string;
-    subtitle: string;
+  header?: {
+    titleStart?: string | null;
+    titleHighlight?: string | null;
+    subtitle?: string | null;
   };
-  painPoints: {
-    title: string;
+  painPoints?: {
+    title?: string | null;
     points?:
       | {
           text: string;
@@ -408,13 +427,13 @@ export interface DecouvreDaggerheart {
         }[]
       | null;
   };
-  solution: {
-    title: string;
-    bio: string;
+  solution?: {
+    title?: string | null;
+    bio?: string | null;
     signature?: string | null;
   };
-  benefits: {
-    title: string;
+  benefits?: {
+    title?: string | null;
     items?:
       | {
           title: string;
@@ -443,6 +462,89 @@ export interface DecouvreDaggerheart {
     signatureText?: string | null;
     signatureName?: string | null;
   };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage".
+ */
+export interface Homepage {
+  id: number;
+  hero?: {
+    titleStart?: string | null;
+    titleHighlight?: string | null;
+    subtitle?: string | null;
+    ctaLabel?: string | null;
+    socialProof?: string | null;
+  };
+  features?: {
+    titleStart?: string | null;
+    titleHighlight?: string | null;
+    titleEnd?: string | null;
+    items?:
+      | {
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+    videoCta?: string | null;
+    videoUrl?: string | null;
+  };
+  kit?: {
+    titleStart?: string | null;
+    titleHighlight?: string | null;
+    titleEnd?: string | null;
+    publisherNote?: string | null;
+    sectionLabel?: string | null;
+    items?:
+      | {
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+    ctaLabel?: string | null;
+  };
+  form?: {
+    title?: string | null;
+    subtitle?: string | null;
+    firstNamePlaceholder?: string | null;
+    emailPlaceholder?: string | null;
+    acquisitionChannelLabel?: string | null;
+    submitButtonDefault?: string | null;
+    submitButtonLoading?: string | null;
+    disclaimer?: string | null;
+  };
+  success?: {
+    title?: string | null;
+    message?: string | null;
+    communityTitle?: string | null;
+    communityText?: string | null;
+    communityCta?: string | null;
+    communityLink?: string | null;
+    signatureText?: string | null;
+    signatureName?: string | null;
+  };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -457,8 +559,32 @@ export interface SiteSetting {
   discordLink?: string | null;
   socialLinks?:
     | {
-        platform: 'discord' | 'instagram' | 'youtube' | 'twitter';
+        platform: 'discord' | 'instagram' | 'youtube' | 'tiktok' | 'patreon' | 'twitter';
         url: string;
+        id?: string | null;
+      }[]
+    | null;
+  footerNavLinks?:
+    | {
+        label: string;
+        href: string;
+        external?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  footerCommunityLinks?:
+    | {
+        label: string;
+        href: string;
+        external?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  footerLegalLinks?:
+    | {
+        label: string;
+        href: string;
+        external?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -472,20 +598,49 @@ export interface SiteSetting {
 export interface Navbar {
   id: number;
   siteName: string;
+  ctaLabel?: string | null;
+  ctaMobileLabel?: string | null;
+  ctaHref?: string | null;
+  /**
+   * Liens du menu desktop. Peuvent avoir des sous-menus.
+   */
   menuItems?:
     | {
         label: string;
-        href: string;
+        emoji?: string | null;
+        href?: string | null;
+        /**
+         * Si renseigné, ce lien devient un dropdown.
+         */
+        children?:
+          | {
+              label: string;
+              href: string;
+              description?: string | null;
+              external?: boolean | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
   /**
-   * Si vide, les liens du menu principal seront utilisés avec "ACCUEIL" ajouté en premier.
+   * Liens rapides affichés en haut du menu mobile. Peuvent également avoir des sous-menus.
    */
   mobileMenuItems?:
     | {
         label: string;
-        href: string;
+        emoji?: string | null;
+        href?: string | null;
+        children?:
+          | {
+              label: string;
+              href: string;
+              description?: string | null;
+              external?: boolean | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -558,6 +713,97 @@ export interface DecouvreDaggerheartSelect<T extends boolean = true> {
         signatureText?: T;
         signatureName?: T;
       };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage_select".
+ */
+export interface HomepageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        titleStart?: T;
+        titleHighlight?: T;
+        subtitle?: T;
+        ctaLabel?: T;
+        socialProof?: T;
+      };
+  features?:
+    | T
+    | {
+        titleStart?: T;
+        titleHighlight?: T;
+        titleEnd?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+        videoCta?: T;
+        videoUrl?: T;
+      };
+  kit?:
+    | T
+    | {
+        titleStart?: T;
+        titleHighlight?: T;
+        titleEnd?: T;
+        publisherNote?: T;
+        sectionLabel?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+        ctaLabel?: T;
+      };
+  form?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        firstNamePlaceholder?: T;
+        emailPlaceholder?: T;
+        acquisitionChannelLabel?: T;
+        submitButtonDefault?: T;
+        submitButtonLoading?: T;
+        disclaimer?: T;
+      };
+  success?:
+    | T
+    | {
+        title?: T;
+        message?: T;
+        communityTitle?: T;
+        communityText?: T;
+        communityCta?: T;
+        communityLink?: T;
+        signatureText?: T;
+        signatureName?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -577,6 +823,30 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
+  footerNavLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        external?: T;
+        id?: T;
+      };
+  footerCommunityLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        external?: T;
+        id?: T;
+      };
+  footerLegalLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        external?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -587,18 +857,41 @@ export interface SiteSettingsSelect<T extends boolean = true> {
  */
 export interface NavbarSelect<T extends boolean = true> {
   siteName?: T;
+  ctaLabel?: T;
+  ctaMobileLabel?: T;
+  ctaHref?: T;
   menuItems?:
     | T
     | {
         label?: T;
+        emoji?: T;
         href?: T;
+        children?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              description?: T;
+              external?: T;
+              id?: T;
+            };
         id?: T;
       };
   mobileMenuItems?:
     | T
     | {
         label?: T;
+        emoji?: T;
         href?: T;
+        children?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              description?: T;
+              external?: T;
+              id?: T;
+            };
         id?: T;
       };
   updatedAt?: T;

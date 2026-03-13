@@ -3,13 +3,16 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import type { NavbarProps } from "./navbar.types";
-import { NAV_ITEMS } from "./navbar.data";
+import type { NavbarContent } from "@/features/navigation/domain/navigation.model";
 import { NavbarLogo } from "./NavbarLogo";
 import { DesktopNav } from "./DesktopNav";
 import { MobileNav } from "./MobileNav";
 
-export function Navbar({ siteName = "DAGUE DE CŒUR" }: NavbarProps) {
+interface NavbarProps {
+    content: NavbarContent;
+}
+
+export function Navbar({ content }: NavbarProps) {
     const pathname = usePathname();
     const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -29,14 +32,16 @@ export function Navbar({ siteName = "DAGUE DE CŒUR" }: NavbarProps) {
             )}>
                 <div className="max-w-7xl mx-auto px-4 md:px-6">
                     <div className="flex items-center justify-between h-16">
-                        <NavbarLogo siteName={siteName} />
-                        <DesktopNav items={NAV_ITEMS} isActive={isActive} />
+                        <NavbarLogo siteName={content.siteName} />
+                        <DesktopNav items={content.menuItems} isActive={isActive} ctaLabel={content.ctaLabel} ctaHref={content.ctaHref} />
                         <MobileNav
-                            items={NAV_ITEMS}
-                            siteName={siteName}
+                            items={content.mobileMenuItems}
+                            siteName={content.siteName}
                             isActive={isActive}
                             open={mobileOpen}
                             onOpenChange={setMobileOpen}
+                            ctaLabel={content.ctaMobileLabel}
+                            ctaHref={content.ctaHref}
                         />
                     </div>
                 </div>

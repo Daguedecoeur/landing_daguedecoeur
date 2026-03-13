@@ -1,39 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { Swords, Dices, Sparkles } from "lucide-react";
+import { Swords, Dices, Sparkles, BookOpen } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import type { FeaturesContent, FeatureItem } from "@/features/homepage/domain/homepage-page.model";
 
-interface Feature {
-    icon: React.ReactNode;
-    title: string;
-    description: string;
-}
-
-const FEATURES: Feature[] = [
-    {
-        icon: <Swords className="w-7 h-7" />,
-        title: "Une création Critical Role",
-        description:
-            "Un système de jeu moderne, narratif et ultra-dynamique pensé par les créateurs du plus grand Actual Play au monde.",
-    },
-    {
-        icon: <Dices className="w-7 h-7" />,
-        title: "Le système Espoir & Peur",
-        description:
-            "Oubliez le simple dé à 20 faces. Avec seulement 2 dés à 12 faces, même vos échecs font avancer l'histoire avec des rebondissements inattendus.",
-    },
-    {
-        icon: <Sparkles className="w-7 h-7" />,
-        title: "Création de perso express",
-        description:
-            "Grâce à un système de cartes de capacités très visuel, créez votre héros unique en quelques minutes, sans calculs complexes.",
-    },
+const ICONS = [
+    <Swords key="swords" className="w-7 h-7" />,
+    <Dices key="dices" className="w-7 h-7" />,
+    <Sparkles key="sparkles" className="w-7 h-7" />,
+    <BookOpen key="book" className="w-7 h-7" />,
 ];
 
-function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
+interface FeatureCardProps {
+    feature: FeatureItem;
+    index: number;
+}
+
+function FeatureCard({ feature, index }: FeatureCardProps) {
     const ref = useScrollReveal<HTMLDivElement>();
 
     return (
@@ -45,7 +31,7 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
             <Card className="bg-white/5 border-gold/15 hover:border-gold/35 h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(212,175,55,0.08)] backdrop-blur-sm">
                 <CardContent className="p-6 md:p-8 space-y-4">
                     <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center text-gold">
-                        {feature.icon}
+                        {ICONS[index % ICONS.length]}
                     </div>
                     <h3 className="font-cinzel font-bold text-cream text-lg">
                         {feature.title}
@@ -59,7 +45,11 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
     );
 }
 
-export function FeaturesSection() {
+interface FeaturesSectionProps {
+    content: FeaturesContent;
+}
+
+export function FeaturesSection({ content }: FeaturesSectionProps) {
     const titleRef = useScrollReveal<HTMLHeadingElement>();
 
     return (
@@ -70,13 +60,13 @@ export function FeaturesSection() {
                     ref={titleRef}
                     className="scroll-reveal font-cinzel text-2xl md:text-3xl lg:text-4xl font-bold text-center text-cream mb-16"
                 >
-                    Pourquoi choisir{" "}
-                    <span className="text-gold">Daggerheart</span>{" "}
-                    pour débuter le JDR ?
+                    {content.titleStart}{" "}
+                    <span className="text-gold">{content.titleHighlight}</span>{" "}
+                    {content.titleEnd}
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 mb-14">
-                    {FEATURES.map((feature, index) => (
+                    {content.items.map((feature, index) => (
                         <FeatureCard key={feature.title} feature={feature} index={index} />
                     ))}
                 </div>
@@ -87,12 +77,8 @@ export function FeaturesSection() {
                         variant="outline"
                         className="border-gold/30 text-gold font-cinzel text-sm rounded-full px-8 py-5 h-auto hover:bg-gold/10 hover:border-gold/60 hover:-translate-y-0.5 transition-all"
                     >
-                        <Link
-                            href="https://www.youtube.com/watch?v=mX-ZTfLZeGg"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            ▶️ Voir le tutoriel vidéo signé par BBE
+                        <Link href={content.videoUrl} target="_blank" rel="noopener noreferrer">
+                            {content.videoCta}
                         </Link>
                     </Button>
                 </div>

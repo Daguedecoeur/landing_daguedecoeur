@@ -3,12 +3,14 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import type { HeroContent } from "@/features/homepage/domain/homepage-page.model";
 
 interface HeroSectionProps {
+    content: HeroContent;
     onOpenSubscribe: () => void;
 }
 
-export function HeroSection({ onOpenSubscribe }: HeroSectionProps) {
+export function HeroSection({ content, onOpenSubscribe }: HeroSectionProps) {
     const headingRef = useScrollReveal<HTMLHeadingElement>();
     const subtitleRef = useScrollReveal<HTMLParagraphElement>({ rootMargin: "0px" });
     const ctaRef = useScrollReveal<HTMLDivElement>({ rootMargin: "0px" });
@@ -16,7 +18,6 @@ export function HeroSection({ onOpenSubscribe }: HeroSectionProps) {
 
     return (
         <header className="relative min-h-[90vh] flex items-center overflow-hidden">
-            {/* Background image + gradient overlays */}
             <div className="absolute inset-0 z-0">
                 <Image
                     src="/images/hero-daggerheart.png"
@@ -28,15 +29,14 @@ export function HeroSection({ onOpenSubscribe }: HeroSectionProps) {
                 <div className="absolute inset-0 bg-gradient-to-b from-deep-violet/80 via-deep-violet/60 to-deep-violet" />
             </div>
 
-            {/* Content */}
             <div className="relative z-10 max-w-4xl mx-auto px-6 py-28 md:py-36 text-center">
                 <h1
                     ref={headingRef}
                     className="scroll-reveal font-cinzel text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-cream leading-tight mb-6 break-words"
                 >
-                    Lancez-vous dans le Jeu de Rôle avec{" "}
+                    {content.titleStart}{" "}
                     <span className="text-gold drop-shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-                        Daggerheart
+                        {content.titleHighlight}
                     </span>
                 </h1>
 
@@ -45,9 +45,7 @@ export function HeroSection({ onOpenSubscribe }: HeroSectionProps) {
                     className="scroll-reveal text-cream/70 text-base sm:text-lg md:text-xl leading-relaxed mb-10 max-w-2xl mx-auto"
                     style={{ transitionDelay: "0.15s" }}
                 >
-                    Rejoignez la 1ère communauté francophone de Daggerheart !
-                    Initiation rapide au JDR, conseils de MJ et kit de démarrage
-                    gratuit à télécharger ici.
+                    {content.subtitle}
                 </p>
 
                 <div
@@ -59,7 +57,7 @@ export function HeroSection({ onOpenSubscribe }: HeroSectionProps) {
                         onClick={onOpenSubscribe}
                         className="bg-gold text-deep-violet font-cinzel font-bold text-xs sm:text-sm md:text-base rounded-full px-4 sm:px-10 py-4 sm:py-6 h-auto whitespace-normal leading-snug hover:bg-gold-hover shadow-[0_0_30px_rgba(212,175,55,0.3)] hover:shadow-[0_0_50px_rgba(212,175,55,0.5)] hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto"
                     >
-                        👇 TÉLÉCHARGER MON KIT DAGGERHEART GRATUIT
+                        {content.ctaLabel}
                     </Button>
                 </div>
 
@@ -68,12 +66,10 @@ export function HeroSection({ onOpenSubscribe }: HeroSectionProps) {
                     className="scroll-reveal text-cream/70 font-medium text-sm sm:text-base mt-2"
                     style={{ transitionDelay: "0.45s" }}
                 >
-                    Recontrez + 300 joueurs sur le Discord, + de 1000 abonnés
-                    sur nos réseaux et + de 500 inscrits à la newsletter.
+                    {content.socialProof}
                 </p>
             </div>
 
-            {/* Scroll indicator */}
             <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
                 <div className="w-6 h-10 border-2 border-gold/30 rounded-full flex justify-center pt-2">
                     <div className="w-1.5 h-3 bg-gold/40 rounded-full" />

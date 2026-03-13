@@ -12,13 +12,16 @@ import {
 import { HeroSection } from "./presentation/HeroSection";
 import { FeaturesSection } from "./presentation/FeaturesSection";
 import { KitSection } from "./presentation/KitSection";
-import type { HomepageContent } from "@/features/newsletter/domain/homepage-content.model";
+import type { HomepagePageContent } from "@/features/homepage/domain/homepage-page.model";
+import type { FormContent, SuccessContent } from "@/features/newsletter/domain/homepage-content.model";
 
 interface HomepageViewProps {
-    content: HomepageContent;
+    page: HomepagePageContent;
+    form: FormContent;
+    success: SuccessContent;
 }
 
-export default function HomepageView({ content }: HomepageViewProps) {
+export default function HomepageView({ page, form, success }: HomepageViewProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { subscribe, isLoading, errors, isSuccess } = useNewsletterSubscription();
 
@@ -38,9 +41,9 @@ export default function HomepageView({ content }: HomepageViewProps) {
 
     return (
         <main>
-            <HeroSection onOpenSubscribe={handleOpenModal} />
-            <FeaturesSection />
-            <KitSection onOpenSubscribe={handleOpenModal} />
+            <HeroSection content={page.hero} onOpenSubscribe={handleOpenModal} />
+            <FeaturesSection content={page.features} />
+            <KitSection content={page.kit} onOpenSubscribe={handleOpenModal} />
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent className="bg-deep-violet border-gold/30 w-[95vw] sm:w-full sm:max-w-2xl max-h-[90vh] overflow-y-auto overflow-x-hidden shadow-[0_0_60px_rgba(212,175,55,0.15)] p-6 sm:p-8">
@@ -52,10 +55,10 @@ export default function HomepageView({ content }: HomepageViewProps) {
                             onSubmit={handleSubmit}
                             isLoading={isLoading}
                             errors={errors}
-                            formContent={content.form}
+                            formContent={form}
                         />
                     ) : (
-                        <SuccessMessage success={content.success} />
+                        <SuccessMessage success={success} />
                     )}
                 </DialogContent>
             </Dialog>

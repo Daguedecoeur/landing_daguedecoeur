@@ -2,6 +2,7 @@ import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
+import { seoPlugin } from '@payloadcms/plugin-seo'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -13,6 +14,7 @@ import { Media } from './cms/collections/Media'
 
 // Globals
 import { Homepage } from './cms/globals/Homepage'
+import { DiscoverDaggerheart } from './cms/globals/DecouvreDaggerheart'
 import { SiteSettings } from './cms/globals/SiteSettings'
 import { Navbar } from './cms/globals/Navbar'
 
@@ -28,7 +30,7 @@ export default buildConfig({
   },
 
   collections: [Users, Articles, Media],
-  globals: [Homepage, SiteSettings, Navbar],
+  globals: [DiscoverDaggerheart, Homepage, SiteSettings, Navbar],
 
   editor: lexicalEditor(),
 
@@ -47,6 +49,25 @@ export default buildConfig({
   sharp,
 
   plugins: [
+    seoPlugin({
+      collections: ['articles'],
+      globals: ['homepage', 'decouvre-daggerheart'],
+      uploadsCollection: 'media',
+      fields: ({ defaultFields }) => [
+        ...defaultFields,
+        {
+          name: 'noIndex',
+          type: 'checkbox',
+          label: 'Masquer des moteurs de recherche (noindex)',
+          defaultValue: false,
+        },
+      ],
+      generateTitle: ({ doc }) => {
+        const title = (doc as Record<string, unknown>)?.title
+          ?? (doc as Record<string, unknown>)?.hero
+        return `${title ?? ''} | Dague de Cœur`
+      },
+    }),
     s3Storage({
       collections: {
         media: {

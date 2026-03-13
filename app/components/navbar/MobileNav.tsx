@@ -12,7 +12,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import type { NavItem } from "./navbar.types";
+import type { NavItem } from "@/features/navigation/domain/navigation.model";
 
 interface MobileNavProps {
     items: NavItem[];
@@ -20,6 +20,8 @@ interface MobileNavProps {
     isActive: (path: string) => boolean;
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    ctaLabel: string;
+    ctaHref: string;
 }
 
 function MobileNavSection({ item, onClose }: { item: NavItem; onClose: () => void }) {
@@ -79,7 +81,7 @@ function MobileNavSection({ item, onClose }: { item: NavItem; onClose: () => voi
     );
 }
 
-export function MobileNav({ items, siteName, isActive, open, onOpenChange }: MobileNavProps) {
+export function MobileNav({ items, siteName, isActive, open, onOpenChange, ctaLabel, ctaHref }: MobileNavProps) {
     const close = () => onOpenChange(false);
 
     return (
@@ -134,8 +136,8 @@ export function MobileNav({ items, siteName, isActive, open, onOpenChange }: Mob
                         asChild
                         className="w-full bg-gold text-deep-violet font-cinzel font-bold text-sm py-3 h-auto rounded-full hover:bg-gold/80 shadow-[0_0_15px_rgba(212,175,55,0.3)]"
                     >
-                        <Link href="/#subscribe" onClick={close}>
-                            Espace Membre / S&apos;inscrire
+                        <Link href={ctaHref} onClick={close}>
+                            {ctaLabel}
                         </Link>
                     </Button>
                 </div>

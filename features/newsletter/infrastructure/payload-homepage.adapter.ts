@@ -1,9 +1,9 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { HomepageContent, HomepageContentRepository } from '../domain/homepage-content.model'
+import type { HomepageContent, HomepageContentRepository } from '../domain/homepage-content.model'
 import contentJson from '../content.json'
 
-// Fallback content from content.json (used when Payload Global has no data)
+// ── Fallback (content.json) ───────────────────────────────────────────────
 function getContentJsonFallback(): HomepageContent {
   const c = contentJson.newsletter
   return {
@@ -44,89 +44,66 @@ function getContentJsonFallback(): HomepageContent {
   }
 }
 
-function isContentEmpty(data: Record<string, unknown>): boolean {
-  // If the Payload Global was just created but never saved,
-  // the header fields will be empty or missing
-  return !data.header || !(data.header as Record<string, unknown>).titleStart
+function isFormEmpty(data: Record<string, unknown>): boolean {
+  return !data.form || !(data.form as Record<string, unknown>).title
 }
 
+// ── Adapter ───────────────────────────────────────────────────────────────
+// Note: hero/features/kit are handled by PayloadHomepagePageAdapter.
+// This adapter reads form, success (for the modal) + legacy sections
+// used by the /decouvre-daggerheart NewsletterView (header, painPoints, etc.)
 export class PayloadHomepageAdapter implements HomepageContentRepository {
   async getHomepageContent(): Promise<HomepageContent> {
     try {
       const payload = await getPayload({ config })
       const data = await payload.findGlobal({ slug: 'decouvre-daggerheart' })
 
-      // If the Global has no real content yet, use fallback
-      if (isContentEmpty(data as unknown as Record<string, unknown>)) {
-        console.log('[Homepage] Payload Global empty, using content.json fallback')
+      if (isFormEmpty(data as unknown as Record<string, unknown>)) {
         return getContentJsonFallback()
       }
 
+      const fallback = getContentJsonFallback()
+
       return {
-        header: {
-          titleStart: data.header?.titleStart ?? '',
-          titleHighlight: data.header?.titleHighlight ?? '',
-          subtitle: data.header?.subtitle ?? '',
-        },
-        painPoints: {
-          title: data.painPoints?.title ?? '',
-          points: (data.painPoints?.points ?? []).map(
-            (p: { text?: string | null }) => p.text ?? ''
-          ),
-        },
-        solution: {
-          title: data.solution?.title ?? '',
-          bio: data.solution?.bio ?? '',
-          signature: data.solution?.signature ?? '',
-        },
-        benefits: {
-          title: data.benefits?.title ?? '',
-          items: (data.benefits?.items ?? []).map(
-            (item: { title?: string | null; description?: string | null }) => ({
-              title: item.title ?? '',
-              description: item.description ?? '',
-            })
-          ),
-        },
+        header: fallback.header,
+        painPoints: fallback.painPoints,
+        solution: fallback.solution,
+        benefits: fallback.benefits,
         form: {
-          title: data.form?.title ?? '',
-          subtitle: data.form?.subtitle ?? '',
-          firstNamePlaceholder: data.form?.firstNamePlaceholder ?? '',
-          emailPlaceholder: data.form?.emailPlaceholder ?? '',
-          acquisitionChannelLabel: data.form?.acquisitionChannelLabel ?? '',
-          submitButtonDefault: data.form?.submitButtonDefault ?? '',
-          submitButtonLoading: data.form?.submitButtonLoading ?? '',
-          disclaimer: data.form?.disclaimer ?? '',
+          title: data.form?.title ?? fallback.form.title,
+          subtitle: data.form?.subtitle ?? fallback.form.subtitle,
+          firstNamePlaceholder: data.form?.firstNamePlaceholder ?? fallback.form.firstNamePlaceholder,
+          emailPlaceholder: data.form?.emailPlaceholder ?? fallback.form.emailPlaceholder,
+          acquisitionChannelLabel: data.form?.acquisitionChannelLabel ?? fallback.form.acquisitionChannelLabel,
+          submitButtonDefault: data.form?.submitButtonDefault ?? fallback.form.submitButtonDefault,
+          submitButtonLoading: data.form?.submitButtonLoading ?? fallback.form.submitButtonLoading,
+          disclaimer: data.form?.disclaimer ?? fallback.form.disclaimer,
         },
         success: {
-          title: data.success?.title ?? '',
-          message: data.success?.message ?? '',
+          title: data.success?.title ?? fallback.success.title,
+          message: data.success?.message ?? fallback.success.message,
           community: {
-            title: data.success?.communityTitle ?? '',
-            text: data.success?.communityText ?? '',
-            cta: data.success?.communityCta ?? '',
-            link: data.success?.communityLink ?? '',
+            title: data.success?.communityTitle ?? fallback.success.community.title,
+            text: data.success?.communityText ?? fallback.success.community.text,
+            cta: data.success?.communityCta ?? fallback.success.community.cta,
+            link: data.success?.communityLink ?? fallback.success.community.link,
           },
           signature: {
-            text: data.success?.signatureText ?? '',
-            name: data.success?.signatureName ?? '',
+            text: data.success?.signatureText ?? fallback.success.signature.text,
+            name: data.success?.signatureName ?? fallback.success.signature.name,
           },
         },
       }
-    } catch (error) {
-      // If Payload is not available (DB down, etc.), fall back to content.json
-      console.error('[Homepage] Payload unavailable, using content.json fallback:', error)
+    } catch {
       return getContentJsonFallback()
     }
   }
 }
 
-// Singleton
+// ── Singleton ─────────────────────────────────────────────────────────────
 let adapter: PayloadHomepageAdapter | null = null
 
 export function getPayloadHomepageAdapter(): PayloadHomepageAdapter {
-  if (!adapter) {
-    adapter = new PayloadHomepageAdapter()
-  }
+  if (!adapter) adapter = new PayloadHomepageAdapter()
   return adapter
 }

@@ -6,8 +6,10 @@ import { Navbar } from "./../components/navbar";
 import { Footer } from "./../components/footer";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { getPayload } from "payload";
-import configPromise from "@payload-config";
+import { GetNavigationUseCase } from "@/features/navigation/application/get-navigation.use-case";
+import { GetSiteSettingsUseCase } from "@/features/navigation/application/get-site-settings.use-case";
+import { getPayloadNavbarAdapter } from "@/features/navigation/infrastructure/payload-navbar.adapter";
+import { getPayloadSiteSettingsAdapter } from "@/features/navigation/infrastructure/payload-site-settings.adapter";
 
 const inter = Inter({ subsets: ["latin"] });
 const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel" });
@@ -58,25 +60,18 @@ export const metadata: Metadata = {
     }
   }
 };
-
-async function getNavbarData() {
-  try {
-    const payload = await getPayload({ config: configPromise });
-    const data = await payload.findGlobal({ slug: "navbar" });
-    return {
-      siteName: data.siteName || undefined,
-    };
-  } catch {
-    return {};
-  }
-}
-
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const navbarData = await getNavbarData();
+  const navRepo = getPayloadNavbarAdapter();
+  const settingsRepo = getPayloadSiteSettingsAdapter();
+
+  const [navContent, siteSettings] = await Promise.all([
+    new GetNavigationUseCase(navRepo).execute(),
+    new GetSiteSettingsUseCase(settingsRepo).execute(),
+  ]);
 
   return (
     <html lang="fr" className={`${cinzel.variable} ${lato.variable}`}>
@@ -163,9 +158,9 @@ export default async function RootLayout({
       <body
         className={`${lato.className} antialiased`}
       >
-        <Navbar {...navbarData} />
+        <Navbar content={navContent} />
         {children}
-        <Footer />
+        <Footer settings={siteSettings} />
         <Analytics />
         <SpeedInsights />
       </body>

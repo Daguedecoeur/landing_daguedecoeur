@@ -4,27 +4,14 @@ import Image from "next/image";
 import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-
-const KIT_ITEMS = [
-    {
-        title: "Les règles de base :",
-        description: "Résumées et traduites en VF.",
-    },
-    {
-        title: "Un mini-scénario clé en main :",
-        description: "Parfait pour votre toute première partie en tant que MJ.",
-    },
-    {
-        title: "Des fiches de personnages :",
-        description: "Des héros pré-tirés prêts à lancer les dés.",
-    },
-];
+import type { KitContent } from "@/features/homepage/domain/homepage-page.model";
 
 interface KitSectionProps {
+    content: KitContent;
     onOpenSubscribe: () => void;
 }
 
-export function KitSection({ onOpenSubscribe }: KitSectionProps) {
+export function KitSection({ content, onOpenSubscribe }: KitSectionProps) {
     const imageRef = useScrollReveal<HTMLDivElement>();
     const contentRef = useScrollReveal<HTMLDivElement>();
 
@@ -35,19 +22,16 @@ export function KitSection({ onOpenSubscribe }: KitSectionProps) {
                     id="kit-title"
                     className="font-cinzel text-2xl md:text-3xl lg:text-4xl font-bold text-center text-deep-violet mb-4"
                 >
-                    Que contient votre{" "}
-                    <span className="text-gold">Kit d&apos;Initiation Gratuit</span> ?
+                    {content.titleStart}{" "}
+                    <span className="text-gold">{content.titleHighlight}</span>
+                    {content.titleEnd}
                 </h2>
                 <p className="text-center text-deep-violet/50 text-sm mb-16">
-                    Publié par Black Book Editions
+                    {content.publisherNote}
                 </p>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-                    {/* Kit Image */}
-                    <div
-                        ref={imageRef}
-                        className="scroll-reveal-left relative order-2 lg:order-1"
-                    >
+                    <div ref={imageRef} className="scroll-reveal-left relative order-2 lg:order-1">
                         <div className="relative aspect-[4/3] w-full max-w-lg mx-auto">
                             <div className="relative h-full w-full rounded-2xl overflow-hidden shadow-2xl border border-gold/20">
                                 <Image
@@ -57,22 +41,17 @@ export function KitSection({ onOpenSubscribe }: KitSectionProps) {
                                     className="object-cover"
                                 />
                             </div>
-                            {/* Gold glow behind image */}
                             <div className="absolute -inset-4 bg-gold/10 rounded-3xl -z-10 blur-2xl" />
                         </div>
                     </div>
 
-                    {/* Kit Content */}
-                    <div
-                        ref={contentRef}
-                        className="scroll-reveal-right order-1 lg:order-2"
-                    >
+                    <div ref={contentRef} className="scroll-reveal-right order-1 lg:order-2">
                         <h3 className="font-cinzel font-bold text-deep-violet text-xl md:text-2xl mb-8 text-center lg:text-left">
-                            Votre butin pour démarrer :
+                            {content.sectionLabel}
                         </h3>
 
                         <ul className="space-y-6 mb-10">
-                            {KIT_ITEMS.map((item) => (
+                            {content.items.map((item) => (
                                 <li key={item.title} className="flex gap-4">
                                     <div className="shrink-0 mt-1">
                                         <CheckCircle className="w-6 h-6 text-gold" />
@@ -94,7 +73,7 @@ export function KitSection({ onOpenSubscribe }: KitSectionProps) {
                                 onClick={onOpenSubscribe}
                                 className="bg-gold text-deep-violet font-cinzel font-bold text-sm rounded-full px-8 py-5 h-auto hover:bg-gold-hover shadow-[0_0_25px_rgba(212,175,55,0.3)] hover:shadow-[0_0_40px_rgba(212,175,55,0.5)] hover:-translate-y-1 transition-all duration-300 cursor-pointer w-full sm:w-auto"
                             >
-                                JE VEUX MON KIT GRATUIT
+                                {content.ctaLabel}
                             </Button>
                         </div>
                     </div>

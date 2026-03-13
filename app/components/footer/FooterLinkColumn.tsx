@@ -1,10 +1,5 @@
 import Link from "next/link";
-
-interface FooterLink {
-    label: string;
-    href: string;
-    external?: boolean;
-}
+import type { FooterLink } from "@/features/navigation/domain/navigation.model";
 
 interface FooterLinkColumnProps {
     title: string;
