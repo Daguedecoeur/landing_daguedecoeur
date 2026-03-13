@@ -516,6 +516,16 @@ export interface Homepage {
       | null;
     ctaLabel?: string | null;
   };
+  faq?: {
+    title?: string | null;
+    items?:
+      | {
+          question: string;
+          answer: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
   form?: {
     title?: string | null;
     subtitle?: string | null;
@@ -771,6 +781,18 @@ export interface HomepageSelect<T extends boolean = true> {
               id?: T;
             };
         ctaLabel?: T;
+      };
+  faq?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
       };
   form?:
     | T

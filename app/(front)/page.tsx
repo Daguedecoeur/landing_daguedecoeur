@@ -28,11 +28,30 @@ export default async function Home() {
   const newsletterRepo = getPayloadHomepageAdapter();
   const newsletterContent = await new GetHomepageContentUseCase(newsletterRepo).execute();
 
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: page.faq.items.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
+
   return (
-    <HomepageView
-      page={page}
-      form={newsletterContent.form}
-      success={newsletterContent.success}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <HomepageView
+        page={page}
+        form={newsletterContent.form}
+        success={newsletterContent.success}
+      />
+    </>
   );
 }

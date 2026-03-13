@@ -12,6 +12,7 @@ import {
 import { HeroSection } from "./presentation/HeroSection";
 import { FeaturesSection } from "./presentation/FeaturesSection";
 import { KitSection } from "./presentation/KitSection";
+import { FaqSection } from "./presentation/FaqSection";
 import type { HomepagePageContent } from "@/features/homepage/domain/homepage-page.model";
 import type { FormContent, SuccessContent } from "@/features/newsletter/domain/homepage-content.model";
 
@@ -44,6 +45,7 @@ export default function HomepageView({ page, form, success }: HomepageViewProps)
             <HeroSection content={page.hero} onOpenSubscribe={handleOpenModal} />
             <FeaturesSection content={page.features} />
             <KitSection content={page.kit} onOpenSubscribe={handleOpenModal} />
+            <FaqSection content={page.faq} />
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent className="bg-deep-violet border-gold/30 w-[95vw] sm:w-full sm:max-w-2xl max-h-[90vh] overflow-y-auto overflow-x-hidden shadow-[0_0_60px_rgba(212,175,55,0.15)] p-6 sm:p-8">

@@ -38,11 +38,23 @@ export interface KitContent {
   ctaLabel: string
 }
 
+// ── FAQ ───────────────────────────────────────────────────────────────────
+export interface FaqItem {
+  question: string
+  answer: string
+}
+
+export interface FaqContent {
+  title: string
+  items: FaqItem[]
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────
 export interface HomepagePageContent {
   hero: HeroContent
   features: FeaturesContent
   kit: KitContent
+  faq: FaqContent
 }
 
 // ── Port (Repository) ─────────────────────────────────────────────────────
