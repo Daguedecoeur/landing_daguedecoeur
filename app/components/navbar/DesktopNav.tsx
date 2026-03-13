@@ -11,8 +11,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import type { NavItem, NavSubItem } from "@/features/navigation/domain/navigation.model";
 import type { User } from "@supabase/supabase-js";
-import { signOutAction } from "@/features/auth/application/auth.actions";
-import { LogOut } from "lucide-react";
+import { UserMenuDesktop } from "./UserMenuDesktop";
 
 interface DesktopNavProps {
     items: NavItem[];
@@ -20,6 +19,7 @@ interface DesktopNavProps {
     ctaLabel: string;
     ctaHref: string;
     user: User | null;
+    avatarUrl?: string | null;
 }
 
 function DesktopDropdownItem({ item }: { item: NavSubItem }) {
@@ -49,7 +49,7 @@ function DesktopDropdownItem({ item }: { item: NavSubItem }) {
     );
 }
 
-export function DesktopNav({ items, isActive, ctaLabel, ctaHref, user }: DesktopNavProps) {
+export function DesktopNav({ items, isActive, ctaLabel, ctaHref, user, avatarUrl }: DesktopNavProps) {
     return (
         <>
             <NavigationMenu className="hidden lg:flex" viewport={true}>
@@ -102,21 +102,7 @@ export function DesktopNav({ items, isActive, ctaLabel, ctaHref, user }: Desktop
             </NavigationMenu>
 
             {user ? (
-                <div className="hidden lg:flex items-center gap-3">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gold/20 border border-gold/30 text-gold font-cinzel font-bold text-xs">
-                        {(user.email?.[0] ?? '?').toUpperCase()}
-                    </div>
-                    <form action={signOutAction}>
-                        <Button
-                            type="submit"
-                            variant="ghost"
-                            className="text-cream/60 hover:text-gold hover:bg-gold/10 font-cinzel text-xs h-9 px-3 gap-1.5"
-                        >
-                            <LogOut className="w-3.5 h-3.5" />
-                            Déconnexion
-                        </Button>
-                    </form>
-                </div>
+                <UserMenuDesktop user={user} avatarUrl={avatarUrl} />
             ) : (
                 <Button
                     asChild

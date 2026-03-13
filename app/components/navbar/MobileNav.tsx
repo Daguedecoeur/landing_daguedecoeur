@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Menu, ChevronDown, Sword, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ interface MobileNavProps {
     ctaLabel: string;
     ctaHref: string;
     user: User | null;
+    avatarUrl?: string | null;
 }
 
 function MobileNavSection({ item, onClose }: { item: NavItem; onClose: () => void }) {
@@ -84,7 +86,7 @@ function MobileNavSection({ item, onClose }: { item: NavItem; onClose: () => voi
     );
 }
 
-export function MobileNav({ items, siteName, isActive, open, onOpenChange, ctaLabel, ctaHref, user }: MobileNavProps) {
+export function MobileNav({ items, siteName, isActive, open, onOpenChange, ctaLabel, ctaHref, user, avatarUrl }: MobileNavProps) {
     const close = () => onOpenChange(false);
 
     return (
@@ -138,13 +140,26 @@ export function MobileNav({ items, siteName, isActive, open, onOpenChange, ctaLa
                     {user ? (
                         <div className="space-y-3">
                             <div className="flex items-center gap-3 px-2">
-                                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gold/20 border border-gold/30 text-gold font-cinzel font-bold text-xs">
-                                    {(user.email?.[0] ?? '?').toUpperCase()}
-                                </div>
+                                {avatarUrl ? (
+                                    <Image
+                                        src={avatarUrl}
+                                        alt="Avatar"
+                                        width={32}
+                                        height={32}
+                                        className="w-8 h-8 rounded-full object-cover border border-gold/30"
+                                    />
+                                ) : (
+                                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gold/20 border border-gold/30 text-gold font-cinzel font-bold text-xs">
+                                        {(user.email?.[0] ?? '?').toUpperCase()}
+                                    </div>
+                                )}
                                 <span className="text-sm font-lato text-cream/70 truncate">
                                     {user.email}
                                 </span>
                             </div>
+                            <Button asChild className="w-full bg-gold text-deep-violet font-cinzel font-bold text-sm py-3 h-auto rounded-full hover:bg-gold/80 shadow-[0_0_15px_rgba(212,175,55,0.3)]">
+                                <Link href="/compte" onClick={close}>⚔️ Mon Compte</Link>
+                            </Button>
                             <form action={signOutAction}>
                                 <Button
                                     type="submit"

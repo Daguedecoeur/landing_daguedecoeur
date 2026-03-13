@@ -9,6 +9,8 @@ import { SignUpUseCase } from './sign-up.use-case'
 import { SignInMagicLinkUseCase } from './sign-in-magic-link.use-case'
 import { SignInOAuthUseCase } from './sign-in-oauth.use-case'
 import { SignOutUseCase } from './sign-out.use-case'
+import { getBrevoAdapter } from '@/features/newsletter/infrastructure/brevo.adapter'
+import { ALL_BREVO_LIST_IDS } from '@/features/newsletter/domain/newsletter.constants'
 
 // ─── Composition Root ────────────────────────────────────────
 function getRepository() {
@@ -57,8 +59,20 @@ export async function signUpAction(formData: FormData) {
     return { error: result.error }
   }
 
+  // ─── Auto-subscribe to all 3 newsletters on signup ──────────
+  try {
+    const brevo = getBrevoAdapter()
+    const displayName = parsed.data.email.split('@')[0]
+    await Promise.all(ALL_BREVO_LIST_IDS.map((listId) =>
+      brevo.addContactToList(parsed.data.email, displayName, listId)
+    ))
+  } catch (err) {
+    console.error('[Brevo signup subscription]', err)
+  }
+
   return { success: 'Vérifie ta boîte mail pour confirmer ton inscription !' }
 }
+
 
 export async function signInMagicLinkAction(formData: FormData) {
   const raw = {

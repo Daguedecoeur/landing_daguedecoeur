@@ -68,7 +68,6 @@ export class BrevoAdapter implements NewsletterRepository {
 
       if (!response.ok) {
         const error = await response.json();
-        // Check for specific Brevo error code for duplicates
         if (response.status === 400 && (error.code === "duplicate_parameter" || error.message?.includes("already exists"))) {
             return { success: false, error: "Contact already exists", code: "ALREADY_EXISTS" };
         }
@@ -78,6 +77,33 @@ export class BrevoAdapter implements NewsletterRepository {
       return { success: true };
     } catch {
       return { success: false, error: "Network error", code: "UNKNOWN" };
+    }
+  }
+
+  /**
+   * Update contact attributes (firstname, lastname) without touching list memberships
+   */
+  async updateContactAttributes(
+    email: string,
+    attributes: { firstName?: string; lastName?: string }
+  ): Promise<{ success: boolean; error?: string }> {
+    try {
+      const response = await fetch(`${BREVO_API_URL}/contacts/${encodeURIComponent(email)}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': this.apiKey,
+        },
+        body: JSON.stringify({
+          attributes: {
+            ...(attributes.firstName && { FIRSTNAME: attributes.firstName }),
+            ...(attributes.lastName && { LASTNAME: attributes.lastName }),
+          },
+        }),
+      })
+      return response.ok ? { success: true } : { success: false, error: 'Failed to update contact' }
+    } catch {
+      return { success: false, error: 'Network error' }
     }
   }
 
@@ -108,7 +134,74 @@ export class BrevoAdapter implements NewsletterRepository {
   }
 
   /**
+   * Remove a contact from a Brevo list
+   */
+  async removeContactFromList(
+    email: string,
+    listId: number
+  ): Promise<{ success: boolean; error?: string }> {
+    try {
+      const response = await fetch(`${BREVO_API_URL}/contacts/lists/${listId}/contacts/remove`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": this.apiKey,
+        },
+        body: JSON.stringify({ emails: [email] }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        return { success: false, error: error.message || "Failed to remove contact" };
+      }
+
+      return { success: true };
+    } catch {
+      return { success: false, error: "Network error" };
+    }
+  }
+
+  /**
+   * Sync newsletter preferences: add or remove contact from each list based on boolean flags
+   */
+  async syncNewsletterLists(
+    email: string,
+    displayName: string,
+    prefs: { listId: number; subscribed: boolean }[]
+  ): Promise<void> {
+    await Promise.all(
+      prefs.map(({ listId, subscribed }) =>
+        subscribed
+          ? this.addContactToList(email, displayName, listId)
+          : this.removeContactFromList(email, listId)
+      )
+    );
+  }
+
+  /**
+   * Get the list IDs a contact is subscribed to in Brevo
+   */
+  async getContactListIds(email: string): Promise<number[]> {
+    try {
+      const response = await fetch(
+        `${BREVO_API_URL}/contacts/${encodeURIComponent(email)}`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json', 'api-key': this.apiKey },
+          next: { revalidate: 0 },
+        }
+      )
+      if (!response.ok) return []
+      const data = await response.json()
+      return data.listIds ?? []
+    } catch {
+      return []
+    }
+  }
+
+  /**
    * Get sent email campaigns - Implementation of NewsletterRepository
+
    */
   async getSentCampaigns(limit: number = 10, offset: number = 0): Promise<{ campaigns: Campaign[]; count: number }> {
      try {

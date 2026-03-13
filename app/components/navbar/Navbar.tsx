@@ -18,20 +18,43 @@ export function Navbar({ content }: NavbarProps) {
     const pathname = usePathname();
     const [mobileOpen, setMobileOpen] = useState(false);
     const [user, setUser] = useState<User | null>(null);
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
     useEffect(() => {
         const supabase = createClient();
 
-        supabase.auth.getUser().then(({ data: { user } }) => {
+        async function fetchUserAndAvatar() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) { setUser(null); setAvatarUrl(null); return; }
             setUser(user);
-        });
+            // Custom upload takes priority over OAuth avatar
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('avatar_url')
+                .eq('id', user.id)
+                .single();
+            setAvatarUrl(profile?.avatar_url ?? user.user_metadata?.avatar_url ?? null);
+        }
+
+        fetchUserAndAvatar();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user ?? null);
+            if (!session?.user) { setUser(null); setAvatarUrl(null); return; }
+            setUser(session.user);
+            // Re-fetch profile avatar on auth change
+            supabase
+                .from('profiles')
+                .select('avatar_url')
+                .eq('id', session.user.id)
+                .single()
+                .then(({ data: profile }) => {
+                    setAvatarUrl(profile?.avatar_url ?? session.user?.user_metadata?.avatar_url ?? null);
+                });
         });
 
         return () => subscription.unsubscribe();
     }, []);
+
 
     const isActive = (path: string) => {
         if (path === "/" && pathname === "/") return true;
@@ -50,7 +73,7 @@ export function Navbar({ content }: NavbarProps) {
                 <div className="max-w-7xl mx-auto px-4 md:px-6">
                     <div className="flex items-center justify-between h-16">
                         <NavbarLogo siteName={content.siteName} />
-                        <DesktopNav items={content.menuItems} isActive={isActive} ctaLabel={content.ctaLabel} ctaHref={content.ctaHref} user={user} />
+                        <DesktopNav items={content.menuItems} isActive={isActive} ctaLabel={content.ctaLabel} ctaHref={content.ctaHref} user={user} avatarUrl={avatarUrl} />
                         <MobileNav
                             items={content.mobileMenuItems}
                             siteName={content.siteName}
@@ -60,6 +83,7 @@ export function Navbar({ content }: NavbarProps) {
                             ctaLabel={content.ctaMobileLabel}
                             ctaHref={content.ctaHref}
                             user={user}
+                            avatarUrl={avatarUrl}
                         />
                     </div>
                 </div>

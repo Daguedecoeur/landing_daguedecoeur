@@ -183,6 +183,23 @@ export type MyData = z.infer<typeof MySchema>;
 
 ---
 
+## Protection des Routes
+
+La protection des routes (ex : `/compte`) est gérée **via le proxy Next.js**, pas via un fichier `middleware.ts`.
+
+- **Ne pas créer de `middleware.ts`** à la racine du projet.
+- La vérification de session se fait directement dans le **Server Component** de la page (`page.tsx`) : appel à `createClient()` + `supabase.auth.getUser()`, suivi d'un `redirect('/login')` si non authentifié.
+- La double sécurité est assurée au niveau de l'infrastructure de déploiement (proxy Vercel/Next.js).
+
+```typescript
+// Dans app/(front)/compte/page.tsx
+const supabase = await createClient()
+const { data: { user } } = await supabase.auth.getUser()
+if (!user) redirect('/login?redirectTo=/compte')
+```
+
+---
+
 ## Règles Strictes
 
 1. **Ne jamais mélanger UI et logique métier** dans le même fichier.
