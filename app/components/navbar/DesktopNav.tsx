@@ -10,12 +10,16 @@ import {
     NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import type { NavItem, NavSubItem } from "@/features/navigation/domain/navigation.model";
+import type { User } from "@supabase/supabase-js";
+import { signOutAction } from "@/features/auth/application/auth.actions";
+import { LogOut } from "lucide-react";
 
 interface DesktopNavProps {
     items: NavItem[];
     isActive: (path: string) => boolean;
     ctaLabel: string;
     ctaHref: string;
+    user: User | null;
 }
 
 function DesktopDropdownItem({ item }: { item: NavSubItem }) {
@@ -45,7 +49,7 @@ function DesktopDropdownItem({ item }: { item: NavSubItem }) {
     );
 }
 
-export function DesktopNav({ items, isActive, ctaLabel, ctaHref }: DesktopNavProps) {
+export function DesktopNav({ items, isActive, ctaLabel, ctaHref, user }: DesktopNavProps) {
     return (
         <>
             <NavigationMenu className="hidden lg:flex" viewport={true}>
@@ -97,12 +101,30 @@ export function DesktopNav({ items, isActive, ctaLabel, ctaHref }: DesktopNavPro
                 </NavigationMenuList>
             </NavigationMenu>
 
-            <Button
-                asChild
-                className="hidden lg:inline-flex bg-gold text-deep-violet font-cinzel font-bold text-xs h-9 rounded-full px-5 hover:bg-gold/80 shadow-[0_0_15px_rgba(212,175,55,0.3)] hover:-translate-y-0.5 transition-all"
-            >
-                <Link href={ctaHref}>{ctaLabel}</Link>
-            </Button>
+            {user ? (
+                <div className="hidden lg:flex items-center gap-3">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gold/20 border border-gold/30 text-gold font-cinzel font-bold text-xs">
+                        {(user.email?.[0] ?? '?').toUpperCase()}
+                    </div>
+                    <form action={signOutAction}>
+                        <Button
+                            type="submit"
+                            variant="ghost"
+                            className="text-cream/60 hover:text-gold hover:bg-gold/10 font-cinzel text-xs h-9 px-3 gap-1.5"
+                        >
+                            <LogOut className="w-3.5 h-3.5" />
+                            Déconnexion
+                        </Button>
+                    </form>
+                </div>
+            ) : (
+                <Button
+                    asChild
+                    className="hidden lg:inline-flex bg-gold text-deep-violet font-cinzel font-bold text-xs h-9 rounded-full px-5 hover:bg-gold/80 shadow-[0_0_15px_rgba(212,175,55,0.3)] hover:-translate-y-0.5 transition-all"
+                >
+                    <Link href="/login">{ctaLabel}</Link>
+                </Button>
+            )}
         </>
     );
 }

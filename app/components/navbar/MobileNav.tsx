@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Menu, ChevronDown, Sword } from "lucide-react";
+import { Menu, ChevronDown, Sword, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     Sheet,
@@ -13,6 +13,8 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet";
 import type { NavItem } from "@/features/navigation/domain/navigation.model";
+import type { User } from "@supabase/supabase-js";
+import { signOutAction } from "@/features/auth/application/auth.actions";
 
 interface MobileNavProps {
     items: NavItem[];
@@ -22,6 +24,7 @@ interface MobileNavProps {
     onOpenChange: (open: boolean) => void;
     ctaLabel: string;
     ctaHref: string;
+    user: User | null;
 }
 
 function MobileNavSection({ item, onClose }: { item: NavItem; onClose: () => void }) {
@@ -81,7 +84,7 @@ function MobileNavSection({ item, onClose }: { item: NavItem; onClose: () => voi
     );
 }
 
-export function MobileNav({ items, siteName, isActive, open, onOpenChange, ctaLabel, ctaHref }: MobileNavProps) {
+export function MobileNav({ items, siteName, isActive, open, onOpenChange, ctaLabel, ctaHref, user }: MobileNavProps) {
     const close = () => onOpenChange(false);
 
     return (
@@ -132,14 +135,37 @@ export function MobileNav({ items, siteName, isActive, open, onOpenChange, ctaLa
                 </nav>
 
                 <div className="mt-auto p-4 border-t border-gold/20">
-                    <Button
-                        asChild
-                        className="w-full bg-gold text-deep-violet font-cinzel font-bold text-sm py-3 h-auto rounded-full hover:bg-gold/80 shadow-[0_0_15px_rgba(212,175,55,0.3)]"
-                    >
-                        <Link href={ctaHref} onClick={close}>
-                            {ctaLabel}
-                        </Link>
-                    </Button>
+                    {user ? (
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-3 px-2">
+                                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gold/20 border border-gold/30 text-gold font-cinzel font-bold text-xs">
+                                    {(user.email?.[0] ?? '?').toUpperCase()}
+                                </div>
+                                <span className="text-sm font-lato text-cream/70 truncate">
+                                    {user.email}
+                                </span>
+                            </div>
+                            <form action={signOutAction}>
+                                <Button
+                                    type="submit"
+                                    onClick={close}
+                                    className="w-full bg-cream/10 text-cream font-cinzel font-bold text-sm py-3 h-auto rounded-full hover:bg-cream/20 border border-cream/20 gap-2"
+                                >
+                                    <LogOut className="w-4 h-4" />
+                                    Déconnexion
+                                </Button>
+                            </form>
+                        </div>
+                    ) : (
+                        <Button
+                            asChild
+                            className="w-full bg-gold text-deep-violet font-cinzel font-bold text-sm py-3 h-auto rounded-full hover:bg-gold/80 shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+                        >
+                            <Link href="/login" onClick={close}>
+                                {ctaLabel}
+                            </Link>
+                        </Button>
+                    )}
                 </div>
             </SheetContent>
         </Sheet>
