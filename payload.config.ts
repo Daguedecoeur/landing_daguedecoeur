@@ -20,6 +20,7 @@ import { SiteSettings } from './cms/globals/SiteSettings'
 import { Navbar } from './cms/globals/Navbar'
 import { NewsletterPreferencesPage } from './cms/globals/NewsletterPreferencesPage'
 import { LegalMentions } from './cms/globals/LegalMentions'
+import { Partners } from './cms/globals/Partners'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -33,7 +34,7 @@ export default buildConfig({
   },
 
   collections: [Users, Articles, Tags, Media],
-  globals: [DiscoverDaggerheart, Homepage, SiteSettings, Navbar, NewsletterPreferencesPage, LegalMentions],
+  globals: [DiscoverDaggerheart, Homepage, SiteSettings, Navbar, NewsletterPreferencesPage, LegalMentions, Partners],
 
   editor: lexicalEditor(),
 

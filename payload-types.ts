@@ -98,6 +98,7 @@ export interface Config {
     navbar: Navbar;
     'newsletter-preferences-page': NewsletterPreferencesPage;
     'legal-mentions': LegalMention;
+    partners: Partner;
   };
   globalsSelect: {
     'decouvre-daggerheart': DecouvreDaggerheartSelect<false> | DecouvreDaggerheartSelect<true>;
@@ -106,6 +107,7 @@ export interface Config {
     navbar: NavbarSelect<false> | NavbarSelect<true>;
     'newsletter-preferences-page': NewsletterPreferencesPageSelect<false> | NewsletterPreferencesPageSelect<true>;
     'legal-mentions': LegalMentionsSelect<false> | LegalMentionsSelect<true>;
+    partners: PartnersSelect<false> | PartnersSelect<true>;
   };
   locale: null;
   widgets: {
@@ -757,6 +759,26 @@ export interface LegalMention {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partners".
+ */
+export interface Partner {
+  id: number;
+  title: string;
+  subtitle?: string | null;
+  partners?:
+    | {
+        name: string;
+        description: string;
+        logo?: (number | null) | Media;
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "decouvre-daggerheart_select".
  */
 export interface DecouvreDaggerheartSelect<T extends boolean = true> {
@@ -1044,6 +1066,26 @@ export interface NewsletterPreferencesPageSelect<T extends boolean = true> {
 export interface LegalMentionsSelect<T extends boolean = true> {
   title?: T;
   content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partners_select".
+ */
+export interface PartnersSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  partners?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        logo?: T;
+        url?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
