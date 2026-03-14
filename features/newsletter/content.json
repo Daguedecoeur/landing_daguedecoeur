@@ -60,6 +60,12 @@
         "cta": "REJOINDRE LE SERVEUR DISCORD MAINTENANT 👾",
         "link": "https://discord.com/invite/Wp5NKt56BX"
       },
+      "accountCreation": {
+          "title": "Crée ton compte Dague de Cœur",
+          "text": "Accède à du contenu exclusif, sauvegarde tes préférences et rejoins la communauté.",
+          "cta": "CRÉER MON COMPTE GRATUITEMENT ⚔️",
+          "link": "/signup"
+      },
       "signature": {
           "text": "À tout de suite de l'autre côté,",
           "name": "Dilhan."

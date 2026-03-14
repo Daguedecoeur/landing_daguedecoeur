@@ -18,6 +18,12 @@ const defaultSuccessContent: SuccessContent = {
         cta: "REJOINDRE LE SERVEUR DISCORD MAINTENANT 👾",
         link: "https://discord.com/invite/Wp5NKt56BX",
     },
+    accountCreation: {
+        title: "Crée ton compte",
+        text: "Accède à du contenu exclusif et gère tes préférences.",
+        cta: "Créer mon compte",
+        link: "/signup",
+    },
     signature: {
         text: "À tout de suite de l'autre côté,",
         name: "Dilhan.",

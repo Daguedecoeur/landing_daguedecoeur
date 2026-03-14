@@ -2,6 +2,7 @@ import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
+import { seoPlugin } from '@payloadcms/plugin-seo'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -10,11 +11,22 @@ import { fileURLToPath } from 'url'
 import { Users } from './cms/collections/Users'
 import { Articles } from './cms/collections/Articles'
 import { Media } from './cms/collections/Media'
+import { Tags } from './cms/collections/Tags'
+import { Events } from './cms/collections/Events'
 
 // Globals
 import { Homepage } from './cms/globals/Homepage'
+import { DiscoverDaggerheart } from './cms/globals/DecouvreDaggerheart'
 import { SiteSettings } from './cms/globals/SiteSettings'
 import { Navbar } from './cms/globals/Navbar'
+import { NewsletterPreferencesPage } from './cms/globals/NewsletterPreferencesPage'
+import { LegalMentions } from './cms/globals/LegalMentions'
+import { Partners } from './cms/globals/Partners'
+import { Tools } from './cms/globals/Tools'
+import { PlanningPage } from './cms/globals/PlanningPage'
+import { ProjectsAndLocations } from './cms/globals/ProjectsAndLocations'
+import { Resources } from './cms/globals/Resources'
+import { AboutPage } from './cms/globals/AboutPage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -27,8 +39,8 @@ export default buildConfig({
     },
   },
 
-  collections: [Users, Articles, Media],
-  globals: [Homepage, SiteSettings, Navbar],
+  collections: [Users, Articles, Tags, Media, Events],
+  globals: [DiscoverDaggerheart, Homepage, SiteSettings, Navbar, NewsletterPreferencesPage, LegalMentions, Partners, Tools, ProjectsAndLocations, PlanningPage, Resources, AboutPage],
 
   editor: lexicalEditor(),
 
@@ -42,11 +54,31 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
+    tablesFilter: ['!profiles'],
   }),
 
   sharp,
 
   plugins: [
+    seoPlugin({
+      collections: ['articles'],
+      globals: ['homepage', 'decouvre-daggerheart'],
+      uploadsCollection: 'media',
+      fields: ({ defaultFields }) => [
+        ...defaultFields,
+        {
+          name: 'noIndex',
+          type: 'checkbox',
+          label: 'Masquer des moteurs de recherche (noindex)',
+          defaultValue: false,
+        },
+      ],
+      generateTitle: ({ doc }) => {
+        const title = (doc as Record<string, unknown>)?.title
+          ?? (doc as Record<string, unknown>)?.hero
+        return `${title ?? ''} | Dague de Cœur`
+      },
+    }),
     s3Storage({
       collections: {
         media: {

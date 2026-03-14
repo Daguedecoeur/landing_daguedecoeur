@@ -1,177 +1,86 @@
-import { getBrevoAdapter } from "@/features/newsletter/infrastructure/brevo.adapter";
-import { NewsletterLayout } from "@/features/newsletter/presentation/NewsletterLayout";
-import Link from "next/link";
-import { cookies } from "next/headers";
-import { UnlockBlog } from "./UnlockBlog";
-import Image from "next/image";
-import { GetSentCampaignsUseCase } from "@/features/newsletter/application/get-sent-campaigns.use-case";
-import type { Metadata } from "next";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Suspense } from 'react'
+import { getPayload } from 'payload'
+import config from '@/payload.config'
+import { PayloadArticlesAdapter } from '@/features/blog/infrastructure/payload-articles.adapter'
+import { GetArticlesUseCase } from '@/features/blog/application/get-articles.use-case'
+import { PageHeader } from '@/features/blog/presentation/components/PageHeader'
+import { TagFilterBar } from '@/features/blog/presentation/components/TagFilterBar'
+import { InfiniteScrollGrid } from '@/features/blog/presentation/components/InfiniteScrollGrid'
+import { loadMoreArticles } from './actions'
+import type { ArticleTag } from '@/features/blog/domain/article.model'
+import type { Tag } from '@/payload-types'
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: "Blog - La Gazette de Dague de Cœur",
-    description: "Les archives des newsletters de la communauté francophone Daggerheart. Chroniques, conseils de MJ, actualités et ressources pour joueurs débutants et confirmés.",
-    openGraph: {
-        type: "website",
-        url: "https://daguedecoeur.fr/blog",
-        title: "Blog - La Gazette de Dague de Cœur",
-        description: "Les archives des newsletters de la communauté francophone Daggerheart. Chroniques, conseils et ressources.",
-        images: [
-            {
-                url: "https://daguedecoeur.fr/images/og-image.png",
-                width: 1200,
-                height: 630,
-                alt: "Dague de Coeur - La Gazette",
-            },
-        ],
-        locale: "fr_FR",
-        siteName: "Dague de Coeur",
-    },
-    twitter: {
-        card: "summary_large_image",
-        title: "Blog - La Gazette de Dague de Cœur",
-        description: "Les archives des newsletters de la communauté francophone Daggerheart.",
-        images: ["https://daguedecoeur.fr/images/og-image.png"],
-    },
-    alternates: {
-        canonical: "https://daguedecoeur.fr/blog",
-    },
-};
+  title: 'La Gazette - Blog | Dague de Cœur',
+  description:
+    'Les archives de la Confrérie. Articles, chroniques, ressources et actualités de la communauté francophone Daggerheart.',
+  openGraph: {
+    type: 'website',
+    url: 'https://daguedecoeur.fr/blog',
+    title: 'La Gazette - Blog | Dague de Cœur',
+    description:
+      'Les archives de la Confrérie. Articles, chroniques, ressources et actualités.',
+    images: [
+      {
+        url: 'https://daguedecoeur.fr/images/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Dague de Coeur - La Gazette',
+      },
+    ],
+    locale: 'fr_FR',
+    siteName: 'Dague de Coeur',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'La Gazette - Blog | Dague de Cœur',
+    description:
+      'Les archives de la Confrérie. Articles, chroniques et ressources.',
+    images: ['https://daguedecoeur.fr/images/og-image.png'],
+  },
+  alternates: {
+    canonical: 'https://daguedecoeur.fr/blog',
+  },
+}
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic'
 
-export default async function BlogPage() {
-    // Composition Root (Simple/Manual Dependency Injection)
-    const repository = getBrevoAdapter();
-    const useCase = new GetSentCampaignsUseCase(repository);
+function mapTag(tag: Tag): ArticleTag {
+  return {
+    id: tag.id,
+    label: tag.label,
+    slug: tag.slug,
+    color: tag.color ?? null,
+  }
+}
 
-    // Execute logic
-    const campaigns = await useCase.execute(50, 0);
+interface BlogPageProps {
+  searchParams: Promise<{ tag?: string }>
+}
 
-    const cookieStore = await cookies();
-    const isUnlocked = cookieStore.has("dague_newsletter_auth");
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const { tag: tagSlug } = await searchParams
 
-    const isLocked = !isUnlocked && campaigns.length > 4;
+  // Composition Root
+  const adapter = new PayloadArticlesAdapter()
+  const useCase = new GetArticlesUseCase(adapter)
+  const initialData = await useCase.execute(tagSlug, 1, 8)
 
-    const visibleLimit = 4;
-    const visibleCampaigns = isLocked ? campaigns.slice(0, visibleLimit) : campaigns;
-    const teaserCampaigns = isLocked ? campaigns.slice(visibleLimit, visibleLimit + 4) : [];
+  // Fetch all tags for the filter bar
+  const payload = await getPayload({ config })
+  const tagsResult = await payload.find({ collection: 'tags', limit: 50, sort: 'label' })
+  const tags: ArticleTag[] = tagsResult.docs.map(mapTag)
 
-    return (
-        <NewsletterLayout>
-            <div className="relative w-full h-[400px] mb-16 rounded-xl overflow-hidden border border-gold shadow-[0_0_50px_var(--color-gold-light)] group">
-                <Image
-                    src="/images/blog-hero.png"
-                    alt="Daggerheart Universe"
-                    fill
-                    className="object-cover transform group-hover:scale-105 transition-transform duration-700"
-                    priority
-                />
+  return (
+    <main className="flex-1 w-full max-w-7xl mx-auto px-6 lg:px-10 py-12 flex flex-col gap-10">
+      <PageHeader />
 
-                {/* Gradient Overlays */}
-                <div className="absolute inset-0 bg-gradient-to-r from-deep-violet via-deep-violet/80 to-transparent"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-deep-violet to-transparent opacity-80"></div>
+      <Suspense fallback={null}>
+        <TagFilterBar tags={tags} activeTag={tagSlug} />
+      </Suspense>
 
-                {/* Content */}
-                <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-16 max-w-4xl">
-                    <span className="text-gold font-cinzel tracking-[0.2em] text-sm md:text-base mb-4 uppercase animate-fade-in">
-                        Archives de la Confrérie
-                    </span>
-                    <h1 className="text-4xl md:text-6xl font-cinzel text-white mb-6 leading-tight drop-shadow-lg">
-                        La Gazette de <br />
-                        <span className="text-gold">Dague de Cœur</span>
-                    </h1>
-                    <p className="text-lg text-cream/90 max-w-xl font-lato leading-relaxed drop-shadow-md">
-                        Plongez dans les chroniques passées, découvrez des secrets oubliés et revivez l&apos;évolution de notre aventure commune.
-                    </p>
-                </div>
-
-                {/* Decorative border embellishment */}
-                <div className="absolute bottom-4 right-4 w-16 h-16 border-b-2 border-r-2 border-gold/50 rounded-br-lg"></div>
-                <div className="absolute top-4 left-4 w-16 h-16 border-t-2 border-l-2 border-gold/50 rounded-tl-lg"></div>
-            </div>
-
-            {/* Grid Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left mb-8">
-                {visibleCampaigns.map((campaign) => (
-                    <Link
-                        key={campaign.id}
-                        href={`/blog/${campaign.id}`}
-                        className="group flex flex-col h-full"
-                    >
-                        <Card className="flex flex-col h-full bg-cream border-2 border-gold rounded-lg ring-0 overflow-hidden transition-all duration-300 hover:shadow-[0_0_25px_var(--color-gold-hover)] hover:-translate-y-1 relative">
-                            {/* Corner decoration */}
-                            <div className="absolute top-0 right-0 p-2 opacity-50">
-                                <div className="w-4 h-4 border-t-2 border-r-2 border-deep-violet" />
-                            </div>
-
-                            <CardContent className="p-6 flex-1 flex flex-col relative z-10">
-                                <div className="flex justify-between items-center mb-4 border-b border-deep-violet/10 pb-4">
-                                    <span className="text-deep-violet/70 text-sm font-cinzel font-semibold">
-                                        {campaign.sentDate ? new Date(campaign.sentDate).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long', year: 'numeric' }) : 'Date inconnue'}
-                                    </span>
-                                    <Badge className="bg-deep-violet text-gold text-[10px] uppercase tracking-widest rounded h-auto">
-                                        Newsletter
-                                    </Badge>
-                                </div>
-
-                                <h2 className="text-2xl font-cinzel text-deep-violet mb-4 leading-tight font-bold group-hover:text-red-hover transition-colors">
-                                    {campaign.subject}
-                                </h2>
-
-                                <div className="mt-auto pt-4 flex items-center text-deep-violet text-sm font-cinzel font-bold">
-                                    <span className="border-b-2 border-gold pb-0.5 group-hover:border-red-hover transition-colors">Lire l&apos;édition</span>
-                                    <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform text-gold group-hover:text-red-hover" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                    </svg>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </Link>
-                ))}
-            </div>
-
-            {isLocked && (
-                <div className="relative mb-16">
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left opacity-30 select-none pointer-events-none blur-sm filter grayscale">
-                        {teaserCampaigns.map((campaign) => (
-                            <Card
-                                key={campaign.id}
-                                className="flex flex-col h-full bg-cream border-2 border-gold rounded-lg ring-0 overflow-hidden p-6"
-                            >
-                                <div className="flex justify-between items-center mb-4 border-b border-deep-violet/10 pb-4">
-                                    <span className="text-deep-violet/70 text-sm font-cinzel font-semibold">
-                                        {campaign.sentDate ? new Date(campaign.sentDate).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long', year: 'numeric' }) : 'Date inconnue'}
-                                    </span>
-                                </div>
-                                <h2 className="text-2xl font-cinzel text-deep-violet mb-4 leading-tight font-bold">
-                                    {campaign.subject}
-                                </h2>
-                            </Card>
-                        ))}
-                    </div>
-
-                    {/* Overlay Gradient + CTA */}
-                    <div className="absolute inset-0 flex items-center justify-center z-20">
-                        <div className="absolute inset-0 bg-gradient-to-t from-deep-violet via-deep-violet/60 to-transparent"></div>
-                        <div className="w-full max-w-2xl px-4 mt-8 md:mt-0 relative z-30">
-                            <UnlockBlog />
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {campaigns.length === 0 && (
-                <Card className="text-center py-24 border-2 border-gold/30 bg-deep-violet/50 rounded-lg ring-0">
-                    <CardContent>
-                        <p className="text-cream text-xl font-cinzel mb-2">Le calme avant la tempête...</p>
-                        <p className="text-cream/60">Aucune newsletter n&apos;a encore été envoyée.</p>
-                    </CardContent>
-                </Card>
-            )}
-
-        </NewsletterLayout>
-    );
+      <InfiniteScrollGrid initialData={initialData} activeTag={tagSlug} loadMoreAction={loadMoreArticles} />
+    </main>
+  )
 }

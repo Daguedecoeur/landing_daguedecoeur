@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SuccessContent } from "../domain/homepage-content.model";
@@ -29,6 +30,17 @@ export function SuccessMessage({ success }: SuccessMessageProps) {
                         >
                             {success.community.cta}
                         </a>
+                    </Button>
+                </div>
+
+                <div className="my-8 pt-6 border-t border-gold/20">
+                    <strong className="block text-xl text-gold mb-2 font-cinzel">{success.accountCreation.title}</strong>
+                    <p className="text-cream mb-6">{success.accountCreation.text}</p>
+
+                    <Button asChild className="w-full bg-gold text-deep-violet font-bold text-lg px-6 py-4 h-auto rounded-xl hover:bg-gold-hover transition-all transform hover:-translate-y-0.5 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+                        <Link href={success.accountCreation.link}>
+                            {success.accountCreation.cta}
+                        </Link>
                     </Button>
                 </div>
 

@@ -97,7 +97,7 @@ export function SubscriptionForm({ onSubmit, isLoading, errors, formContent }: S
                 <Button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-gold text-deep-violet font-cinzel font-bold text-lg py-3 px-6 h-auto rounded-full hover:bg-gold/80 transition-all transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+                    className="w-full bg-gold text-deep-violet font-cinzel font-bold text-sm sm:text-lg py-3 px-4 sm:px-6 h-auto whitespace-normal leading-snug rounded-xl sm:rounded-full hover:bg-gold/80 transition-all transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(212,175,55,0.3)]"
                 >
                     {isLoading ? formContent.submitButtonLoading : formContent.submitButtonDefault}
                 </Button>
