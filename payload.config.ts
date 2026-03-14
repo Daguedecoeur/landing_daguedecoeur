@@ -11,6 +11,7 @@ import { fileURLToPath } from 'url'
 import { Users } from './cms/collections/Users'
 import { Articles } from './cms/collections/Articles'
 import { Media } from './cms/collections/Media'
+import { Tags } from './cms/collections/Tags'
 
 // Globals
 import { Homepage } from './cms/globals/Homepage'
@@ -30,7 +31,7 @@ export default buildConfig({
     },
   },
 
-  collections: [Users, Articles, Media],
+  collections: [Users, Articles, Tags, Media],
   globals: [DiscoverDaggerheart, Homepage, SiteSettings, Navbar, NewsletterPreferencesPage],
 
   editor: lexicalEditor(),

@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     users: User;
     articles: Article;
+    tags: Tag;
     media: Media;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -79,6 +80,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -191,7 +193,22 @@ export interface Article {
   };
   coverImage?: (number | null) | Media;
   publishedAt?: string | null;
+  /**
+   * Ancien champ — utiliser les Tags à la place.
+   */
   category?: ('newsletter' | 'ressource' | 'actualite' | 'guide') | null;
+  /**
+   * Tags affichés sur la carte dans le blog
+   */
+  tags?: (number | Tag)[] | null;
+  /**
+   * Contrôle la taille de la carte dans la grille bento du blog
+   */
+  featuredSize?: ('featured' | 'large' | 'medium' | 'small') | null;
+  /**
+   * HTML brut importé depuis Brevo. Affiché à la place du richtext quand présent.
+   */
+  rawHtml?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -226,6 +243,21 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  label: string;
+  /**
+   * Identifiant URL (ex: actualites, lore, chroniques)
+   */
+  slug: string;
+  color?: ('gold' | 'cream' | 'violet') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -255,6 +287,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'articles';
         value: number | Article;
+      } | null)
+    | ({
+        relationTo: 'tags';
+        value: number | Tag;
       } | null)
     | ({
         relationTo: 'media';
@@ -339,6 +375,9 @@ export interface ArticlesSelect<T extends boolean = true> {
   coverImage?: T;
   publishedAt?: T;
   category?: T;
+  tags?: T;
+  featuredSize?: T;
+  rawHtml?: T;
   meta?:
     | T
     | {
@@ -347,6 +386,17 @@ export interface ArticlesSelect<T extends boolean = true> {
         image?: T;
         noIndex?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  label?: T;
+  slug?: T;
+  color?: T;
   updatedAt?: T;
   createdAt?: T;
 }
