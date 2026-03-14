@@ -3,6 +3,9 @@ import type { GlobalConfig } from 'payload'
 export const Homepage: GlobalConfig = {
   slug: 'homepage',
   label: 'Homepage (Landing Page)',
+  admin: {
+    group: 'Pages',
+  },
   fields: [
 
     // ── Hero ──────────────────────────────────────────────────────────

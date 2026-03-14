@@ -3,6 +3,9 @@ import type { GlobalConfig } from 'payload'
 export const NewsletterPreferencesPage: GlobalConfig = {
   slug: 'newsletter-preferences-page',
   label: 'Page Préférences Newsletter',
+  admin: {
+    group: 'Pages',
+  },
   fields: [
     {
       name: 'title',

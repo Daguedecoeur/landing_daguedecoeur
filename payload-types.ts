@@ -97,6 +97,7 @@ export interface Config {
     'site-settings': SiteSetting;
     navbar: Navbar;
     'newsletter-preferences-page': NewsletterPreferencesPage;
+    'legal-mentions': LegalMention;
   };
   globalsSelect: {
     'decouvre-daggerheart': DecouvreDaggerheartSelect<false> | DecouvreDaggerheartSelect<true>;
@@ -104,6 +105,7 @@ export interface Config {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     navbar: NavbarSelect<false> | NavbarSelect<true>;
     'newsletter-preferences-page': NewsletterPreferencesPageSelect<false> | NewsletterPreferencesPageSelect<true>;
+    'legal-mentions': LegalMentionsSelect<false> | LegalMentionsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -730,6 +732,31 @@ export interface NewsletterPreferencesPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "legal-mentions".
+ */
+export interface LegalMention {
+  id: number;
+  title: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "decouvre-daggerheart_select".
  */
 export interface DecouvreDaggerheartSelect<T extends boolean = true> {
@@ -1006,6 +1033,17 @@ export interface NewsletterPreferencesPageSelect<T extends boolean = true> {
   ctaDescription?: T;
   ctaButtonLabel?: T;
   ctaButtonHref?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "legal-mentions_select".
+ */
+export interface LegalMentionsSelect<T extends boolean = true> {
+  title?: T;
+  content?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

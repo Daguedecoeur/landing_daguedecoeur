@@ -5,6 +5,9 @@ import type { GlobalConfig } from 'payload'
 export const DiscoverDaggerheart: GlobalConfig = {
   slug: 'decouvre-daggerheart',
   label: 'Page Découvre Daggerheart',
+  admin: {
+    group: 'Pages',
+  },
   fields: [
     {
       name: 'header',
