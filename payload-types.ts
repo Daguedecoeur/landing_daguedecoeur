@@ -71,6 +71,7 @@ export interface Config {
     articles: Article;
     tags: Tag;
     media: Media;
+    events: Event;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -101,6 +103,7 @@ export interface Config {
     partners: Partner;
     tools: Tool;
     'projects-and-locations': ProjectsAndLocation;
+    'planning-page': PlanningPage;
   };
   globalsSelect: {
     'decouvre-daggerheart': DecouvreDaggerheartSelect<false> | DecouvreDaggerheartSelect<true>;
@@ -112,6 +115,7 @@ export interface Config {
     partners: PartnersSelect<false> | PartnersSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
     'projects-and-locations': ProjectsAndLocationsSelect<false> | ProjectsAndLocationsSelect<true>;
+    'planning-page': PlanningPageSelect<false> | PlanningPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -266,6 +270,47 @@ export interface Tag {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly identifier (ex: stream-eldoria)
+   */
+  slug: string;
+  type: 'stream' | 'game-release' | 'convention';
+  startDate: string;
+  /**
+   * Optionnel — pour les conventions multi-jours
+   */
+  endDate?: string | null;
+  /**
+   * Court résumé affiché sur les cartes
+   */
+  description?: string | null;
+  coverImage?: (number | null) | Media;
+  /**
+   * Lien Twitch, page convention, page produit, etc.
+   */
+  externalUrl?: string | null;
+  /**
+   * Par défaut : "Voir détails"
+   */
+  ctaLabel?: string | null;
+  /**
+   * Pour les conventions (ex: Paris, Cannes)
+   */
+  location?: string | null;
+  /**
+   * Afficher dans la section "Conventions à venir"
+   */
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -303,6 +348,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: number | Event;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -426,6 +475,25 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  type?: T;
+  startDate?: T;
+  endDate?: T;
+  description?: T;
+  coverImage?: T;
+  externalUrl?: T;
+  ctaLabel?: T;
+  location?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -833,6 +901,22 @@ export interface ProjectsAndLocation {
   createdAt?: string | null;
 }
 /**
+ * Contenu éditable de la page Planning (hero)
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "planning-page".
+ */
+export interface PlanningPage {
+  id: number;
+  hero?: {
+    title?: string | null;
+    subtitle?: string | null;
+    backgroundImage?: (number | null) | Media;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "decouvre-daggerheart_select".
  */
@@ -1188,6 +1272,22 @@ export interface ProjectsAndLocationsSelect<T extends boolean = true> {
         ctaHref?: T;
         image?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "planning-page_select".
+ */
+export interface PlanningPageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        backgroundImage?: T;
       };
   updatedAt?: T;
   createdAt?: T;

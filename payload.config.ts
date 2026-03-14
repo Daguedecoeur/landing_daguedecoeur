@@ -12,6 +12,7 @@ import { Users } from './cms/collections/Users'
 import { Articles } from './cms/collections/Articles'
 import { Media } from './cms/collections/Media'
 import { Tags } from './cms/collections/Tags'
+import { Events } from './cms/collections/Events'
 
 // Globals
 import { Homepage } from './cms/globals/Homepage'
@@ -22,6 +23,7 @@ import { NewsletterPreferencesPage } from './cms/globals/NewsletterPreferencesPa
 import { LegalMentions } from './cms/globals/LegalMentions'
 import { Partners } from './cms/globals/Partners'
 import { Tools } from './cms/globals/Tools'
+import { PlanningPage } from './cms/globals/PlanningPage'
 import { ProjectsAndLocations } from './cms/globals/ProjectsAndLocations'
 
 const filename = fileURLToPath(import.meta.url)
@@ -35,8 +37,8 @@ export default buildConfig({
     },
   },
 
-  collections: [Users, Articles, Tags, Media],
-  globals: [DiscoverDaggerheart, Homepage, SiteSettings, Navbar, NewsletterPreferencesPage, LegalMentions, Partners, Tools, ProjectsAndLocations],
+  collections: [Users, Articles, Tags, Media, Events],
+  globals: [DiscoverDaggerheart, Homepage, SiteSettings, Navbar, NewsletterPreferencesPage, LegalMentions, Partners, Tools, ProjectsAndLocations, PlanningPage],
 
   editor: lexicalEditor(),
 
