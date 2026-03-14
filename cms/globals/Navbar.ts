@@ -112,10 +112,10 @@ export const Navbar: GlobalConfig = {
           emoji: '🎭',
           href: '',
           children: [
-            { label: 'Actual Play Daggerheart', href: '/actual-play', description: 'Nos parties en live et replay', external: false },
-            { label: 'Salle Immersive Dagues & Dragons', href: '/salle-immersive', description: 'Chartres', external: false },
-            { label: 'Studio Audiovisuel Dédale', href: '/studio-dedale', description: 'Chartres', external: false },
-            { label: 'Le Tréfon', href: '/trefon', description: 'Bar à jeux heroic fantasy — Chartres', external: false },
+            { label: 'Salle Immersive Dagues & Dragons', href: '/nos-projets#dagues-dragons', description: 'Chartres', external: false },
+            { label: 'Studio Audiovisuel Dédale', href: '/nos-projets#studio-dedale', description: 'Chartres', external: false },
+            { label: 'Le Tréfon', href: '/nos-projets#le-trefon', description: 'Bar à jeux heroic fantasy — Chartres', external: false },
+            { label: 'Actual Play Daggerheart', href: '/nos-projets#actual-play', description: 'Nos parties en live et replay', external: false },
           ],
         },
         {

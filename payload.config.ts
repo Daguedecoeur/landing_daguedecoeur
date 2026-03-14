@@ -22,6 +22,7 @@ import { NewsletterPreferencesPage } from './cms/globals/NewsletterPreferencesPa
 import { LegalMentions } from './cms/globals/LegalMentions'
 import { Partners } from './cms/globals/Partners'
 import { Tools } from './cms/globals/Tools'
+import { ProjectsAndLocations } from './cms/globals/ProjectsAndLocations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -35,7 +36,7 @@ export default buildConfig({
   },
 
   collections: [Users, Articles, Tags, Media],
-  globals: [DiscoverDaggerheart, Homepage, SiteSettings, Navbar, NewsletterPreferencesPage, LegalMentions, Partners, Tools],
+  globals: [DiscoverDaggerheart, Homepage, SiteSettings, Navbar, NewsletterPreferencesPage, LegalMentions, Partners, Tools, ProjectsAndLocations],
 
   editor: lexicalEditor(),
 

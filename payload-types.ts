@@ -100,6 +100,7 @@ export interface Config {
     'legal-mentions': LegalMention;
     partners: Partner;
     tools: Tool;
+    'projects-and-locations': ProjectsAndLocation;
   };
   globalsSelect: {
     'decouvre-daggerheart': DecouvreDaggerheartSelect<false> | DecouvreDaggerheartSelect<true>;
@@ -110,6 +111,7 @@ export interface Config {
     'legal-mentions': LegalMentionsSelect<false> | LegalMentionsSelect<true>;
     partners: PartnersSelect<false> | PartnersSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
+    'projects-and-locations': ProjectsAndLocationsSelect<false> | ProjectsAndLocationsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -808,6 +810,30 @@ export interface Tool {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects-and-locations".
+ */
+export interface ProjectsAndLocation {
+  id: number;
+  locations?:
+    | {
+        title: string;
+        subtitle?: string | null;
+        /**
+         * Utilisé pour le lien dans le menu. Le lien sera /nos-projets#slug
+         */
+        slug: string;
+        description?: string | null;
+        ctaLabel?: string | null;
+        ctaHref?: string | null;
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "decouvre-daggerheart_select".
  */
 export interface DecouvreDaggerheartSelect<T extends boolean = true> {
@@ -1140,6 +1166,27 @@ export interface ToolsSelect<T extends boolean = true> {
               icon?: T;
               id?: T;
             };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects-and-locations_select".
+ */
+export interface ProjectsAndLocationsSelect<T extends boolean = true> {
+  locations?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        slug?: T;
+        description?: T;
+        ctaLabel?: T;
+        ctaHref?: T;
+        image?: T;
         id?: T;
       };
   updatedAt?: T;
