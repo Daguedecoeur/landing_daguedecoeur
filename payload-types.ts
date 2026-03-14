@@ -99,6 +99,7 @@ export interface Config {
     'newsletter-preferences-page': NewsletterPreferencesPage;
     'legal-mentions': LegalMention;
     partners: Partner;
+    tools: Tool;
   };
   globalsSelect: {
     'decouvre-daggerheart': DecouvreDaggerheartSelect<false> | DecouvreDaggerheartSelect<true>;
@@ -108,6 +109,7 @@ export interface Config {
     'newsletter-preferences-page': NewsletterPreferencesPageSelect<false> | NewsletterPreferencesPageSelect<true>;
     'legal-mentions': LegalMentionsSelect<false> | LegalMentionsSelect<true>;
     partners: PartnersSelect<false> | PartnersSelect<true>;
+    tools: ToolsSelect<false> | ToolsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -779,6 +781,33 @@ export interface Partner {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tools".
+ */
+export interface Tool {
+  id: number;
+  title: string;
+  subtitle?: string | null;
+  categories?:
+    | {
+        name: string;
+        icon: string;
+        links?:
+          | {
+              name: string;
+              description: string;
+              url: string;
+              icon?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "decouvre-daggerheart_select".
  */
 export interface DecouvreDaggerheartSelect<T extends boolean = true> {
@@ -1084,6 +1113,33 @@ export interface PartnersSelect<T extends boolean = true> {
         description?: T;
         logo?: T;
         url?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tools_select".
+ */
+export interface ToolsSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  categories?:
+    | T
+    | {
+        name?: T;
+        icon?: T;
+        links?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              url?: T;
+              icon?: T;
+              id?: T;
+            };
         id?: T;
       };
   updatedAt?: T;

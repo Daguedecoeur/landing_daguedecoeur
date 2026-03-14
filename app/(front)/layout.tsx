@@ -164,7 +164,7 @@ export default async function RootLayout({
         className={`${lato.className} antialiased min-h-screen flex flex-col`}
       >
         <Navbar content={navContent} />
-        <main className="flex-1">
+        <main className="flex-1 flex flex-col">
           {children}
         </main>
         <Footer settings={siteSettings} />
