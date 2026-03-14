@@ -105,6 +105,7 @@ export interface Config {
     'projects-and-locations': ProjectsAndLocation;
     'planning-page': PlanningPage;
     resources: Resource;
+    'about-page': AboutPage;
   };
   globalsSelect: {
     'decouvre-daggerheart': DecouvreDaggerheartSelect<false> | DecouvreDaggerheartSelect<true>;
@@ -118,6 +119,7 @@ export interface Config {
     'projects-and-locations': ProjectsAndLocationsSelect<false> | ProjectsAndLocationsSelect<true>;
     'planning-page': PlanningPageSelect<false> | PlanningPageSelect<true>;
     resources: ResourcesSelect<false> | ResourcesSelect<true>;
+    'about-page': AboutPageSelect<false> | AboutPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -952,6 +954,39 @@ export interface Resource {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page".
+ */
+export interface AboutPage {
+  id: number;
+  title: string;
+  /**
+   * Une phrase d accroche affichée sous le titre principal.
+   */
+  subtitle?: string | null;
+  /**
+   * Image hero affichée en haut de la page.
+   */
+  coverImage?: (number | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "decouvre-daggerheart_select".
  */
 export interface DecouvreDaggerheartSelect<T extends boolean = true> {
@@ -1355,6 +1390,19 @@ export interface ResourcesSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page_select".
+ */
+export interface AboutPageSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  coverImage?: T;
+  content?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -162,8 +162,38 @@ export const Navbar: GlobalConfig = {
       ],
       defaultValue: [
         { label: 'Découvre Daggerheart', emoji: '🎁', href: '/decouvre-daggerheart', children: [] },
-        { label: 'Blog', emoji: '📝', href: '/blog', children: [] },
+        {
+          label: 'Ressources & Outils',
+          emoji: '🧰',
+          href: '',
+          children: [
+            { label: 'Blog et Newsletter', href: '/blog', description: 'Tes articles, conseils MJ et newsletters mensuels', external: false },
+            { label: 'Téléchargements Gratuits', href: '/telechargements', description: 'Tes PDF en accès libre', external: false },
+            { label: 'Outils Daggerheart', href: '/outils', description: "L'annuaire des sites officiels et communautaires", external: true },
+            { label: 'SRD Daggerheart VF', href: '/srd', description: 'Tout le système disponible en licence libre', external: false },
+          ],
+        },
+        {
+          label: 'Nos Projets & Lieux',
+          emoji: '🎭',
+          href: '',
+          children: [
+            { label: 'Salle Immersive Dagues & Dragons', href: '/nos-projets#dagues-dragons', description: 'Chartres', external: false },
+            { label: 'Studio Audiovisuel Dédale', href: '/nos-projets#studio-dedale', description: 'Chartres', external: false },
+            { label: 'Le Tréfon', href: '/nos-projets#le-trefon', description: 'Bar à jeux heroic fantasy — Chartres', external: false },
+            { label: 'Actual Play Daggerheart', href: '/nos-projets#actual-play', description: 'Nos parties en live et replay', external: false },
+          ],
+        },
         { label: 'Planning', emoji: '🗓️', href: '/planning', children: [] },
+        {
+          label: 'Abonnements & Boutiques',
+          emoji: '⭐',
+          href: '',
+          children: [
+            { label: 'Catalogue Patreon', href: 'https://patreon.com', description: 'PDFs et vidéos exclusives', external: true },
+            { label: 'Boutique Etsy', href: 'https://etsy.com', description: 'Goodies, impressions 3D, gravures sur bois', external: true },
+          ],
+        },
       ],
     },
   ],

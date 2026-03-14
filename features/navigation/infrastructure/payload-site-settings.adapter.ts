@@ -33,7 +33,7 @@ function getFallback(): SiteSettingsContent {
     footerCommunityLinks: [
       { label: 'Discord', href: 'https://discord.com/invite/Wp5NKt56BX', external: true },
       { label: 'Patreon', href: 'https://patreon.com', external: true },
-      { label: 'Actual Play', href: '/actual-play' },
+      { label: 'Actual Play', href: '/nos-projets#actual-play' },
       { label: 'Boutique Etsy', href: 'https://etsy.com', external: true },
     ],
     footerLegalLinks: [

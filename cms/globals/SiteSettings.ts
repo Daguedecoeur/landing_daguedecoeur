@@ -67,7 +67,7 @@ export const SiteSettings: GlobalConfig = {
       defaultValue: [
         { label: 'Discord', href: 'https://discord.com/invite/Wp5NKt56BX', external: true },
         { label: 'Patreon', href: 'https://patreon.com', external: true },
-        { label: 'Actual Play', href: '/actual-play', external: false },
+        { label: 'Actual Play', href: '/nos-projets#actual-play', external: false },
         { label: 'Boutique Etsy', href: 'https://etsy.com', external: true },
       ],
     },

@@ -26,6 +26,7 @@ import { Tools } from './cms/globals/Tools'
 import { PlanningPage } from './cms/globals/PlanningPage'
 import { ProjectsAndLocations } from './cms/globals/ProjectsAndLocations'
 import { Resources } from './cms/globals/Resources'
+import { AboutPage } from './cms/globals/AboutPage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -39,7 +40,7 @@ export default buildConfig({
   },
 
   collections: [Users, Articles, Tags, Media, Events],
-  globals: [DiscoverDaggerheart, Homepage, SiteSettings, Navbar, NewsletterPreferencesPage, LegalMentions, Partners, Tools, ProjectsAndLocations, PlanningPage, Resources],
+  globals: [DiscoverDaggerheart, Homepage, SiteSettings, Navbar, NewsletterPreferencesPage, LegalMentions, Partners, Tools, ProjectsAndLocations, PlanningPage, Resources, AboutPage],
 
   editor: lexicalEditor(),
 
