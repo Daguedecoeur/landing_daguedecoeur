@@ -104,6 +104,7 @@ export interface Config {
     tools: Tool;
     'projects-and-locations': ProjectsAndLocation;
     'planning-page': PlanningPage;
+    resources: Resource;
   };
   globalsSelect: {
     'decouvre-daggerheart': DecouvreDaggerheartSelect<false> | DecouvreDaggerheartSelect<true>;
@@ -116,6 +117,7 @@ export interface Config {
     tools: ToolsSelect<false> | ToolsSelect<true>;
     'projects-and-locations': ProjectsAndLocationsSelect<false> | ProjectsAndLocationsSelect<true>;
     'planning-page': PlanningPageSelect<false> | PlanningPageSelect<true>;
+    resources: ResourcesSelect<false> | ResourcesSelect<true>;
   };
   locale: null;
   widgets: {
@@ -587,6 +589,10 @@ export interface DecouvreDaggerheart {
     communityText?: string | null;
     communityCta?: string | null;
     communityLink?: string | null;
+    accountCreationTitle?: string | null;
+    accountCreationText?: string | null;
+    accountCreationCta?: string | null;
+    accountCreationLink?: string | null;
     signatureText?: string | null;
     signatureName?: string | null;
   };
@@ -918,6 +924,34 @@ export interface PlanningPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "resources".
+ */
+export interface Resource {
+  id: number;
+  title: string;
+  subtitle?: string | null;
+  categories?:
+    | {
+        name: string;
+        icon: string;
+        items?:
+          | {
+              name: string;
+              description?: string | null;
+              file: number | Media;
+              fileSize?: string | null;
+              fileType?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "decouvre-daggerheart_select".
  */
 export interface DecouvreDaggerheartSelect<T extends boolean = true> {
@@ -979,6 +1013,10 @@ export interface DecouvreDaggerheartSelect<T extends boolean = true> {
         communityText?: T;
         communityCta?: T;
         communityLink?: T;
+        accountCreationTitle?: T;
+        accountCreationText?: T;
+        accountCreationCta?: T;
+        accountCreationLink?: T;
         signatureText?: T;
         signatureName?: T;
       };
@@ -1288,6 +1326,34 @@ export interface PlanningPageSelect<T extends boolean = true> {
         title?: T;
         subtitle?: T;
         backgroundImage?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "resources_select".
+ */
+export interface ResourcesSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  categories?:
+    | T
+    | {
+        name?: T;
+        icon?: T;
+        items?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              file?: T;
+              fileSize?: T;
+              fileType?: T;
+              id?: T;
+            };
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

@@ -1,4 +1,4 @@
-import { Partner } from '../domain/partners.model'
+import { Partner } from '../../domain/partners.model'
 import Image from 'next/image'
 
 interface PartnerCardProps {

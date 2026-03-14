@@ -39,6 +39,7 @@ function getContentJsonFallback(): HomepageContent {
       title: c.success.title,
       message: c.success.message,
       community: c.success.community,
+      accountCreation: c.success.accountCreation,
       signature: c.success.signature,
     },
   }
@@ -87,6 +88,12 @@ export class PayloadHomepageAdapter implements HomepageContentRepository {
             text: data.success?.communityText ?? fallback.success.community.text,
             cta: data.success?.communityCta ?? fallback.success.community.cta,
             link: data.success?.communityLink ?? fallback.success.community.link,
+          },
+          accountCreation: {
+            title: data.success?.accountCreationTitle ?? fallback.success.accountCreation.title,
+            text: data.success?.accountCreationText ?? fallback.success.accountCreation.text,
+            cta: data.success?.accountCreationCta ?? fallback.success.accountCreation.cta,
+            link: data.success?.accountCreationLink ?? fallback.success.accountCreation.link,
           },
           signature: {
             text: data.success?.signatureText ?? fallback.success.signature.text,
