@@ -35,16 +35,18 @@ export class PayloadPlanningPageAdapter implements PlanningPageRepository {
       const payload = await getPayload({ config })
       const data = await payload.findGlobal({ slug: 'planning-page' })
 
+      const fb = getHeroFallback()
       const hero = data.hero as Record<string, unknown> | undefined
 
       return {
         hero: {
-          title: (hero?.title as string) ?? getHeroFallback().hero.title,
-          subtitle: (hero?.subtitle as string) ?? getHeroFallback().hero.subtitle,
-          backgroundImageUrl: resolveImageUrl(hero?.backgroundImage) ?? getHeroFallback().hero.backgroundImageUrl,
+          title: (hero?.title as string) ?? fb.hero.title,
+          subtitle: (hero?.subtitle as string) ?? fb.hero.subtitle,
+          backgroundImageUrl: resolveImageUrl(hero?.backgroundImage) ?? fb.hero.backgroundImageUrl,
         },
       }
-    } catch {
+    } catch (error) {
+      console.error('[PayloadPlanningPageAdapter]', error)
       return getHeroFallback()
     }
   }
@@ -104,16 +106,7 @@ export class PayloadEventAdapter implements EventRepository {
 }
 
 // ── Singletons ───────────────────────────────────────────────────────────
+import { createSingleton } from '@/lib/singleton'
 
-let pageAdapter: PayloadPlanningPageAdapter | null = null
-let eventAdapter: PayloadEventAdapter | null = null
-
-export function getPayloadPlanningPageAdapter(): PayloadPlanningPageAdapter {
-  if (!pageAdapter) pageAdapter = new PayloadPlanningPageAdapter()
-  return pageAdapter
-}
-
-export function getPayloadEventAdapter(): PayloadEventAdapter {
-  if (!eventAdapter) eventAdapter = new PayloadEventAdapter()
-  return eventAdapter
-}
+export const getPayloadPlanningPageAdapter = createSingleton(() => new PayloadPlanningPageAdapter())
+export const getPayloadEventAdapter = createSingleton(() => new PayloadEventAdapter())

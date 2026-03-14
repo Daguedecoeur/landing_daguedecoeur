@@ -7,10 +7,16 @@ export const metadata: Metadata = {
   description: 'Connecte-toi à ton compte Dague de Coeur pour accéder à la communauté francophone Daggerheart.',
 }
 
-export default function LoginPage() {
+type Props = {
+  searchParams: Promise<{ redirectTo?: string }>
+}
+
+export default async function LoginPage({ searchParams }: Props) {
+  const { redirectTo } = await searchParams
+
   return (
     <AuthLayout>
-      <LoginForm />
+      <LoginForm redirectTo={redirectTo} />
     </AuthLayout>
   )
 }

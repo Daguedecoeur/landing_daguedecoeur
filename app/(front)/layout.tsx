@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Cinzel, Lato } from "next/font/google";
+import { Cinzel, Lato } from "next/font/google";
 import "./../globals.css";
 import Script from "next/script";
 import { Navbar } from "./../components/navbar";
@@ -11,7 +11,7 @@ import { GetSiteSettingsUseCase } from "@/features/navigation/application/get-si
 import { getPayloadNavbarAdapter } from "@/features/navigation/infrastructure/payload-navbar.adapter";
 import { getPayloadSiteSettingsAdapter } from "@/features/navigation/infrastructure/payload-site-settings.adapter";
 
-const inter = Inter({ subsets: ["latin"] });
+
 const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel" });
 const lato = Lato({
   subsets: ["latin"],
@@ -76,7 +76,11 @@ export default async function RootLayout({
   return (
     <html lang="fr" className={`${cinzel.variable} ${lato.variable}`}>
       <head>
-        {/* Material Symbols for blog icons */}
+        <link
+          rel="preload"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          as="style"
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"

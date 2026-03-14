@@ -18,8 +18,8 @@ export interface AuthResult {
 // ─── Repository Port ─────────────────────────────────────────
 export interface AuthRepository {
   signInWithPassword(email: string, password: string): Promise<AuthResult>
-  signInWithMagicLink(email: string): Promise<AuthResult>
-  signInWithOAuth(provider: AuthProvider): Promise<AuthResult>
+  signInWithMagicLink(email: string, redirectTo?: string): Promise<AuthResult>
+  signInWithOAuth(provider: AuthProvider, redirectTo?: string): Promise<AuthResult>
   signUp(email: string, password: string): Promise<AuthResult>
   signOut(): Promise<AuthResult>
   getUser(): Promise<AuthUser | null>

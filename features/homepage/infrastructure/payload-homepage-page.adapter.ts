@@ -106,6 +106,7 @@ export class PayloadHomepagePageAdapter implements HomepagePageRepository {
         return getFallback()
       }
 
+      const fb = getFallback()
       const hero = data.hero as Record<string, unknown> | undefined
       const features = data.features as Record<string, unknown> | undefined
       const kit = data.kit as Record<string, unknown> | undefined
@@ -113,53 +114,51 @@ export class PayloadHomepagePageAdapter implements HomepagePageRepository {
 
       return {
         hero: {
-          titleStart: (hero?.titleStart as string) ?? getFallback().hero.titleStart,
-          titleHighlight: (hero?.titleHighlight as string) ?? getFallback().hero.titleHighlight,
-          subtitle: (hero?.subtitle as string) ?? getFallback().hero.subtitle,
-          ctaLabel: (hero?.ctaLabel as string) ?? getFallback().hero.ctaLabel,
-          socialProof: (hero?.socialProof as string) ?? getFallback().hero.socialProof,
+          titleStart: (hero?.titleStart as string) ?? fb.hero.titleStart,
+          titleHighlight: (hero?.titleHighlight as string) ?? fb.hero.titleHighlight,
+          subtitle: (hero?.subtitle as string) ?? fb.hero.subtitle,
+          ctaLabel: (hero?.ctaLabel as string) ?? fb.hero.ctaLabel,
+          socialProof: (hero?.socialProof as string) ?? fb.hero.socialProof,
         },
         features: {
-          titleStart: (features?.titleStart as string) ?? getFallback().features.titleStart,
-          titleHighlight: (features?.titleHighlight as string) ?? getFallback().features.titleHighlight,
-          titleEnd: (features?.titleEnd as string) ?? getFallback().features.titleEnd,
+          titleStart: (features?.titleStart as string) ?? fb.features.titleStart,
+          titleHighlight: (features?.titleHighlight as string) ?? fb.features.titleHighlight,
+          titleEnd: (features?.titleEnd as string) ?? fb.features.titleEnd,
           items: ((features?.items ?? []) as Array<Record<string, unknown>>).map((item) => ({
             title: (item.title as string) ?? '',
             description: (item.description as string) ?? '',
           })),
-          videoCta: (features?.videoCta as string) ?? getFallback().features.videoCta,
-          videoUrl: (features?.videoUrl as string) ?? getFallback().features.videoUrl,
+          videoCta: (features?.videoCta as string) ?? fb.features.videoCta,
+          videoUrl: (features?.videoUrl as string) ?? fb.features.videoUrl,
         },
         kit: {
-          titleStart: (kit?.titleStart as string) ?? getFallback().kit.titleStart,
-          titleHighlight: (kit?.titleHighlight as string) ?? getFallback().kit.titleHighlight,
-          titleEnd: (kit?.titleEnd as string) ?? getFallback().kit.titleEnd,
-          publisherNote: (kit?.publisherNote as string) ?? getFallback().kit.publisherNote,
-          sectionLabel: (kit?.sectionLabel as string) ?? getFallback().kit.sectionLabel,
+          titleStart: (kit?.titleStart as string) ?? fb.kit.titleStart,
+          titleHighlight: (kit?.titleHighlight as string) ?? fb.kit.titleHighlight,
+          titleEnd: (kit?.titleEnd as string) ?? fb.kit.titleEnd,
+          publisherNote: (kit?.publisherNote as string) ?? fb.kit.publisherNote,
+          sectionLabel: (kit?.sectionLabel as string) ?? fb.kit.sectionLabel,
           items: ((kit?.items ?? []) as Array<Record<string, unknown>>).map((item) => ({
             title: (item.title as string) ?? '',
             description: (item.description as string) ?? '',
           })),
-          ctaLabel: (kit?.ctaLabel as string) ?? getFallback().kit.ctaLabel,
+          ctaLabel: (kit?.ctaLabel as string) ?? fb.kit.ctaLabel,
         },
         faq: {
-          title: (faq?.title as string) ?? getFallback().faq.title,
+          title: (faq?.title as string) ?? fb.faq.title,
           items: ((faq?.items ?? []) as Array<Record<string, unknown>>).map((item) => ({
             question: (item.question as string) ?? '',
             answer: (item.answer as string) ?? '',
           })),
         },
       }
-    } catch {
+    } catch (error) {
+      console.error('[PayloadHomepagePageAdapter]', error)
       return getFallback()
     }
   }
 }
 
 // ── Singleton ─────────────────────────────────────────────────────────────
-let adapter: PayloadHomepagePageAdapter | null = null
+import { createSingleton } from '@/lib/singleton'
 
-export function getPayloadHomepagePageAdapter(): PayloadHomepagePageAdapter {
-  if (!adapter) adapter = new PayloadHomepagePageAdapter()
-  return adapter
-}
+export const getPayloadHomepagePageAdapter = createSingleton(() => new PayloadHomepagePageAdapter())

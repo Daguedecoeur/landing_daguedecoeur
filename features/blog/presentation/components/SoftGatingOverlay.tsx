@@ -1,8 +1,12 @@
+'use client'
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
 export function SoftGatingOverlay() {
+  const pathname = usePathname()
   return (
     <div className="relative">
       {/* Blur gradient overlay */}
@@ -38,7 +42,7 @@ export function SoftGatingOverlay() {
               asChild
               className="bg-gold text-deep-violet hover:bg-gold/90 font-cinzel font-bold text-base px-8 py-3 h-auto shadow-[0_0_20px_rgba(212,175,55,0.3)]"
             >
-              <Link href="/signup?redirectTo=back">
+              <Link href={`/signup?redirectTo=${encodeURIComponent(pathname)}`}>
                 Créer un compte gratuit 🗡️
               </Link>
             </Button>
@@ -47,7 +51,7 @@ export function SoftGatingOverlay() {
               asChild
               className="border-gold/40 text-gold hover:bg-gold/10 font-cinzel text-sm px-6 py-3 h-auto"
             >
-              <Link href="/login?redirectTo=back">
+              <Link href={`/login?redirectTo=${encodeURIComponent(pathname)}`}>
                 Se connecter
               </Link>
             </Button>

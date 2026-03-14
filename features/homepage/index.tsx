@@ -39,9 +39,8 @@ export default function HomepageView({ page, form, success }: HomepageViewProps)
         };
         subscribe(data);
     };
-
     return (
-        <main>
+        <div>
             <HeroSection content={page.hero} onOpenSubscribe={handleOpenModal} />
             <FeaturesSection content={page.features} />
             <KitSection content={page.kit} onOpenSubscribe={handleOpenModal} />
@@ -64,6 +63,6 @@ export default function HomepageView({ page, form, success }: HomepageViewProps)
                     )}
                 </DialogContent>
             </Dialog>
-        </main>
+        </div>
     );
 }

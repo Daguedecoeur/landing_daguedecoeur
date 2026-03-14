@@ -12,7 +12,11 @@ import { AuthMessage } from './AuthMessage'
 
 type AuthTab = 'password' | 'magic-link'
 
-export function LoginForm() {
+interface LoginFormProps {
+  redirectTo?: string
+}
+
+export function LoginForm({ redirectTo }: LoginFormProps) {
   const [activeTab, setActiveTab] = useState<AuthTab>('password')
   const [error, setError] = useState<string>()
   const [success, setSuccess] = useState<string>()
@@ -67,7 +71,7 @@ export function LoginForm() {
       </div>
 
       <div className="bg-deep-violet/60 backdrop-blur-xl border border-gold/20 rounded-2xl p-8 shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
-        <OAuthButtons />
+        <OAuthButtons redirectTo={redirectTo} />
 
         <div className="relative my-6">
           <Separator className="bg-gold/20" />
@@ -107,6 +111,7 @@ export function LoginForm() {
 
         {activeTab === 'password' && (
           <form action={handlePasswordSubmit} className="space-y-4 mt-4">
+            {redirectTo && <input type="hidden" name="redirectTo" value={redirectTo} />}
             <div>
               <label htmlFor="login-email" className="block text-xs font-lato font-semibold text-cream/70 mb-1.5 uppercase tracking-wider">
                 Email
@@ -153,6 +158,7 @@ export function LoginForm() {
 
         {activeTab === 'magic-link' && (
           <form action={handleMagicLinkSubmit} className="space-y-4 mt-4">
+            {redirectTo && <input type="hidden" name="redirectTo" value={redirectTo} />}
             <div>
               <label htmlFor="magic-email" className="block text-xs font-lato font-semibold text-cream/70 mb-1.5 uppercase tracking-wider">
                 Email
@@ -188,7 +194,7 @@ export function LoginForm() {
           <p className="text-sm font-lato text-cream/50">
             Pas encore de compte ?{' '}
             <Link
-              href="/signup"
+              href={redirectTo ? `/signup?redirectTo=${encodeURIComponent(redirectTo)}` : '/signup'}
               className="text-gold hover:text-gold/80 font-semibold transition-colors"
             >
               Créer un compte

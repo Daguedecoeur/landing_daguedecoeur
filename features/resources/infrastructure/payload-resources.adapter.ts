@@ -1,36 +1,33 @@
 import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
-import { ResourcesPageData, ResourcesRepository } from '../domain/resources.model'
+import type { Resource, Media } from '@/payload-types'
+import type { ResourcesPageData, ResourcesRepository } from '../domain/resources.model'
 
 export class PayloadResourcesAdapter implements ResourcesRepository {
   async getResources(): Promise<ResourcesPageData> {
     const payload = await getPayload({ config: configPromise })
 
-    const data = await payload.findGlobal({
-      slug: 'resources' as any,
+    const data: Resource = await payload.findGlobal({
+      slug: 'resources',
     })
 
-    const raw = data as any
-
     return {
-      title: raw.title || 'Téléchargements',
-      subtitle: raw.subtitle,
-      categories: (raw.categories ?? []).map((cat: any) => ({
+      title: data.title || 'Téléchargements',
+      subtitle: data.subtitle ?? undefined,
+      categories: (data.categories ?? []).map((cat) => ({
         name: cat.name,
         icon: cat.icon,
-        items: (cat.items ?? []).map((item: any) => {
-          const file = item.file
-          const fileUrl =
-            typeof file === 'object' && file?.url
-              ? file.url
-              : ''
+        items: (cat.items ?? []).map((item) => {
+          const file = typeof item.file === 'object' && item.file !== null
+            ? (item.file as Media)
+            : null
 
           return {
             name: item.name,
-            description: item.description,
-            fileUrl,
-            fileSize: item.fileSize,
-            fileType: item.fileType,
+            description: item.description ?? undefined,
+            fileUrl: file?.url ?? '',
+            fileSize: item.fileSize ?? undefined,
+            fileType: item.fileType ?? undefined,
           }
         }),
       })),

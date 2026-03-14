@@ -97,16 +97,14 @@ export class PayloadProjectsPageAdapter implements ProjectsPageRepository {
       })
 
       return { locations }
-    } catch {
+    } catch (error) {
+      console.error('[PayloadProjectsPageAdapter]', error)
       return getFallback()
     }
   }
 }
 
 // ── Singleton ─────────────────────────────────────────────────────────────
-let adapter: PayloadProjectsPageAdapter | null = null
+import { createSingleton } from '@/lib/singleton'
 
-export function getPayloadProjectsPageAdapter(): PayloadProjectsPageAdapter {
-  if (!adapter) adapter = new PayloadProjectsPageAdapter()
-  return adapter
-}
+export const getPayloadProjectsPageAdapter = createSingleton(() => new PayloadProjectsPageAdapter())

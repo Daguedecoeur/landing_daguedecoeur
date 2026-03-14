@@ -13,12 +13,15 @@ export class SupabaseAuthAdapter implements AuthRepository {
     return { success: true }
   }
 
-  async signInWithMagicLink(email: string): Promise<AuthResult> {
+  async signInWithMagicLink(email: string, redirectTo?: string): Promise<AuthResult> {
     const supabase = await createClient()
+    const callbackUrl = redirectTo
+      ? `${getBaseUrl()}/api/auth-callback?next=${encodeURIComponent(redirectTo)}`
+      : `${getBaseUrl()}/api/auth-callback`
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${getBaseUrl()}/api/auth-callback`,
+        emailRedirectTo: callbackUrl,
       },
     })
 
@@ -29,12 +32,15 @@ export class SupabaseAuthAdapter implements AuthRepository {
     return { success: true }
   }
 
-  async signInWithOAuth(provider: AuthProvider): Promise<AuthResult> {
+  async signInWithOAuth(provider: AuthProvider, redirectTo?: string): Promise<AuthResult> {
     const supabase = await createClient()
+    const callbackUrl = redirectTo
+      ? `${getBaseUrl()}/api/auth-callback?next=${encodeURIComponent(redirectTo)}`
+      : `${getBaseUrl()}/api/auth-callback`
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${getBaseUrl()}/api/auth-callback`,
+        redirectTo: callbackUrl,
       },
     })
 

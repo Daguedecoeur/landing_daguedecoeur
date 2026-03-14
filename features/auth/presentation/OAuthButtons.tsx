@@ -3,12 +3,16 @@
 import { Button } from '@/components/ui/button'
 import { signInOAuthAction } from '../application/auth.actions'
 
-export function OAuthButtons() {
+interface OAuthButtonsProps {
+  redirectTo?: string
+}
+
+export function OAuthButtons({ redirectTo }: OAuthButtonsProps) {
   return (
     <div className="flex flex-col gap-3">
       <Button
         type="button"
-        onClick={() => signInOAuthAction('discord')}
+        onClick={() => signInOAuthAction('discord', redirectTo)}
         className="w-full h-11 bg-[#5865F2] hover:bg-[#4752c4] text-white font-lato font-semibold rounded-lg transition-all hover:-translate-y-0.5 shadow-lg"
       >
         <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
@@ -19,7 +23,7 @@ export function OAuthButtons() {
 
       <Button
         type="button"
-        onClick={() => signInOAuthAction('google')}
+        onClick={() => signInOAuthAction('google', redirectTo)}
         className="w-full h-11 bg-white hover:bg-gray-100 text-gray-800 font-lato font-semibold rounded-lg transition-all hover:-translate-y-0.5 shadow-lg border border-gray-200"
       >
         <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -33,3 +37,4 @@ export function OAuthButtons() {
     </div>
   )
 }
+

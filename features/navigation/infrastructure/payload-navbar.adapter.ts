@@ -56,7 +56,8 @@ export class PayloadNavbarAdapter implements NavbarRepository {
         ctaMobileLabel: data.ctaMobileLabel ?? "Espace Membre / S'inscrire",
         ctaHref: data.ctaHref ?? '/#subscribe',
       }
-    } catch {
+    } catch (error) {
+      console.error('[PayloadNavbarAdapter]', error)
       return {
         siteName: 'DAGUE DE CŒUR',
         menuItems: [],
@@ -70,9 +71,6 @@ export class PayloadNavbarAdapter implements NavbarRepository {
 }
 
 // ── Singleton ─────────────────────────────────────────────────────────────
-let adapter: PayloadNavbarAdapter | null = null
+import { createSingleton } from '@/lib/singleton'
 
-export function getPayloadNavbarAdapter(): PayloadNavbarAdapter {
-  if (!adapter) adapter = new PayloadNavbarAdapter()
-  return adapter
-}
+export const getPayloadNavbarAdapter = createSingleton(() => new PayloadNavbarAdapter())

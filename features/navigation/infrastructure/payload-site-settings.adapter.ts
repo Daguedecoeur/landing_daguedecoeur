@@ -83,16 +83,14 @@ export class PayloadSiteSettingsAdapter implements SiteSettingsRepository {
           ? (data.footerLegalLinks as RawLink[]).map(mapLink)
           : fallback.footerLegalLinks,
       }
-    } catch {
+    } catch (error) {
+      console.error('[PayloadSiteSettingsAdapter]', error)
       return getFallback()
     }
   }
 }
 
 // ── Singleton ─────────────────────────────────────────────────────────────
-let adapter: PayloadSiteSettingsAdapter | null = null
+import { createSingleton } from '@/lib/singleton'
 
-export function getPayloadSiteSettingsAdapter(): PayloadSiteSettingsAdapter {
-  if (!adapter) adapter = new PayloadSiteSettingsAdapter()
-  return adapter
-}
+export const getPayloadSiteSettingsAdapter = createSingleton(() => new PayloadSiteSettingsAdapter())

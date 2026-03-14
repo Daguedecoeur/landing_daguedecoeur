@@ -1,26 +1,31 @@
 import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
-import { PartnersData, PartnersRepository } from '../domain/partners.model'
+import type { Partner as PayloadPartner, Media } from '@/payload-types'
+import type { PartnersData, PartnersRepository } from '../domain/partners.model'
 
 export class PayloadPartnersAdapter implements PartnersRepository {
   async getPartners(): Promise<PartnersData> {
     const payload = await getPayload({ config: configPromise })
 
-    const data = await payload.findGlobal({
-      slug: 'partners' as any,
+    const data: PayloadPartner = await payload.findGlobal({
+      slug: 'partners',
     })
 
-    const raw = data as any
-
     return {
-      title: raw.title || 'Nos Partenaires',
-      subtitle: raw.subtitle,
-      partners: (raw.partners ?? []).map((p: any) => ({
-        name: p.name,
-        description: p.description,
-        logo: p.logo ? { url: p.logo.url, alt: p.logo.alt } : undefined,
-        url: p.url,
-      })),
+      title: data.title || 'Nos Partenaires',
+      subtitle: data.subtitle ?? undefined,
+      partners: (data.partners ?? []).map((p) => {
+        const logo = typeof p.logo === 'object' && p.logo !== null
+          ? p.logo as Media
+          : undefined
+
+        return {
+          name: p.name,
+          description: p.description,
+          logo: logo ? { url: logo.url ?? '', alt: logo.alt } : undefined,
+          url: p.url ?? undefined,
+        }
+      }),
     }
   }
 }

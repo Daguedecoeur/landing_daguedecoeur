@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export default async function Home() {
   // Homepage page content (hero, features, kit) — from features/homepage

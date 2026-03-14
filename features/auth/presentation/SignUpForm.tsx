@@ -10,7 +10,11 @@ import { signUpAction } from '../application/auth.actions'
 import { OAuthButtons } from './OAuthButtons'
 import { AuthMessage } from './AuthMessage'
 
-export function SignUpForm() {
+interface SignUpFormProps {
+  redirectTo?: string
+}
+
+export function SignUpForm({ redirectTo }: SignUpFormProps) {
   const [error, setError] = useState<string>()
   const [success, setSuccess] = useState<string>()
   const [isLoading, setIsLoading] = useState(false)
@@ -51,7 +55,7 @@ export function SignUpForm() {
       {/* Card */}
       <div className="bg-deep-violet/60 backdrop-blur-xl border border-gold/20 rounded-2xl p-8 shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
         {/* OAuth */}
-        <OAuthButtons />
+        <OAuthButtons redirectTo={redirectTo} />
 
         {/* Separator */}
         <div className="relative my-6">
@@ -66,6 +70,7 @@ export function SignUpForm() {
 
         {/* Sign Up Form */}
         <form action={handleSubmit} className="space-y-4 mt-4">
+          {redirectTo && <input type="hidden" name="redirectTo" value={redirectTo} />}
           <div>
             <label htmlFor="signup-email" className="block text-xs font-lato font-semibold text-cream/70 mb-1.5 uppercase tracking-wider">
               Email
@@ -131,7 +136,7 @@ export function SignUpForm() {
           <p className="text-sm font-lato text-cream/50">
             Déjà un compte ?{' '}
             <Link
-              href="/login"
+              href={redirectTo ? `/login?redirectTo=${encodeURIComponent(redirectTo)}` : '/login'}
               className="text-gold hover:text-gold/80 font-semibold transition-colors"
             >
               Se connecter

@@ -101,16 +101,14 @@ export class PayloadHomepageAdapter implements HomepageContentRepository {
           },
         },
       }
-    } catch {
+    } catch (error) {
+      console.error('[PayloadHomepageAdapter]', error)
       return getContentJsonFallback()
     }
   }
 }
 
 // ── Singleton ─────────────────────────────────────────────────────────────
-let adapter: PayloadHomepageAdapter | null = null
+import { createSingleton } from '@/lib/singleton'
 
-export function getPayloadHomepageAdapter(): PayloadHomepageAdapter {
-  if (!adapter) adapter = new PayloadHomepageAdapter()
-  return adapter
-}
+export const getPayloadHomepageAdapter = createSingleton(() => new PayloadHomepageAdapter())

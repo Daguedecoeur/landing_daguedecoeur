@@ -38,14 +38,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization)
-     * - favicon.ico, images/ (static assets)
-     * - api/ (PayloadCMS API routes)
-     * - admin (PayloadCMS admin)
-     */
-    '/((?!_next/static|_next/image|favicon.ico|images|api|admin).*)',
+    '/compte/:path*',
   ],
 }

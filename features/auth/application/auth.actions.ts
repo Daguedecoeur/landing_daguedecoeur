@@ -17,6 +17,16 @@ function getRepository() {
   return new SupabaseAuthAdapter()
 }
 
+// ─── Helpers ─────────────────────────────────────────────────
+
+/** Only allow relative paths (prevents open-redirect attacks). */
+function sanitizeRedirectUrl(url: string | null | undefined): string {
+  if (!url) return '/'
+  // Must start with / and not be a protocol-relative URL (//)
+  if (url.startsWith('/') && !url.startsWith('//')) return url
+  return '/'
+}
+
 // ─── Server Actions ──────────────────────────────────────────
 
 export async function signInAction(formData: FormData) {
@@ -37,7 +47,8 @@ export async function signInAction(formData: FormData) {
     return { error: result.error }
   }
 
-  redirect('/')
+  const redirectTo = sanitizeRedirectUrl(formData.get('redirectTo') as string)
+  redirect(redirectTo)
 }
 
 export async function signUpAction(formData: FormData) {
@@ -85,7 +96,8 @@ export async function signInMagicLinkAction(formData: FormData) {
   }
 
   const useCase = new SignInMagicLinkUseCase(getRepository())
-  const result = await useCase.execute(parsed.data.email)
+  const redirectTo = sanitizeRedirectUrl(formData.get('redirectTo') as string)
+  const result = await useCase.execute(parsed.data.email, redirectTo)
 
   if (!result.success) {
     return { error: result.error }
@@ -94,9 +106,10 @@ export async function signInMagicLinkAction(formData: FormData) {
   return { success: 'Un lien de connexion a été envoyé à ton adresse email !' }
 }
 
-export async function signInOAuthAction(provider: AuthProvider) {
+export async function signInOAuthAction(provider: AuthProvider, redirectTo?: string) {
+  const safeRedirect = sanitizeRedirectUrl(redirectTo)
   const useCase = new SignInOAuthUseCase(getRepository())
-  const result = await useCase.execute(provider)
+  const result = await useCase.execute(provider, safeRedirect)
 
   if (!result.success) {
     return { error: result.error }
