@@ -1,4 +1,5 @@
 import { NewsletterRepository, Campaign } from "../domain/newsletter.model";
+import { generateNewsletterToken } from "@/lib/hmac";
 
 const BREVO_API_URL = "https://api.brevo.com/v3";
 
@@ -61,7 +62,11 @@ export class BrevoAdapter implements NewsletterRepository {
     try {
       const response = await this.request<BrevoContact>("/contacts", {
         email,
-        attributes: { firstname: firstName, ...customAttributes },
+        attributes: {
+          FIRSTNAME: firstName,
+          NEWSLETTER_TOKEN: generateNewsletterToken(email),
+          ...customAttributes,
+        },
         listIds: [listId],
         updateEnabled: true,
       });

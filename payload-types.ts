@@ -94,12 +94,14 @@ export interface Config {
     homepage: Homepage;
     'site-settings': SiteSetting;
     navbar: Navbar;
+    'newsletter-preferences-page': NewsletterPreferencesPage;
   };
   globalsSelect: {
     'decouvre-daggerheart': DecouvreDaggerheartSelect<false> | DecouvreDaggerheartSelect<true>;
     homepage: HomepageSelect<false> | HomepageSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     navbar: NavbarSelect<false> | NavbarSelect<true>;
+    'newsletter-preferences-page': NewsletterPreferencesPageSelect<false> | NewsletterPreferencesPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -659,6 +661,25 @@ export interface Navbar {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletter-preferences-page".
+ */
+export interface NewsletterPreferencesPage {
+  id: number;
+  title?: string | null;
+  subtitle?: string | null;
+  unsubscribeWarning?: string | null;
+  confirmLabel?: string | null;
+  cancelLabel?: string | null;
+  successMessage?: string | null;
+  ctaTitle?: string | null;
+  ctaDescription?: string | null;
+  ctaButtonLabel?: string | null;
+  ctaButtonHref?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "decouvre-daggerheart_select".
  */
 export interface DecouvreDaggerheartSelect<T extends boolean = true> {
@@ -916,6 +937,25 @@ export interface NavbarSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletter-preferences-page_select".
+ */
+export interface NewsletterPreferencesPageSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  unsubscribeWarning?: T;
+  confirmLabel?: T;
+  cancelLabel?: T;
+  successMessage?: T;
+  ctaTitle?: T;
+  ctaDescription?: T;
+  ctaButtonLabel?: T;
+  ctaButtonHref?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
