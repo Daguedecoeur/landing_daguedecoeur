@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import type { PlanningEvent, EventType, PlanningHeroContent } from '@/features/planning/domain/planning.model'
 import { PlanningHero } from './PlanningHero'
 import { MiniCalendar } from './components/MiniCalendar'
@@ -44,6 +44,19 @@ export function PlanningLayout({ hero, upcomingEvents, pastEvents }: PlanningLay
     setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1))
   }
 
+  const handleDateClick = useCallback((slug: string) => {
+    const el = document.getElementById(`event-${slug}`)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      // Gold flash highlight
+      el.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.5)'
+      el.style.transition = 'box-shadow 0.3s ease'
+      setTimeout(() => {
+        el.style.boxShadow = ''
+      }, 1500)
+    }
+  }, [])
+
   return (
     <>
       <PlanningHero content={hero} />
@@ -57,6 +70,7 @@ export function PlanningLayout({ hero, upcomingEvents, pastEvents }: PlanningLay
               events={allEvents}
               onPrevMonth={handlePrevMonth}
               onNextMonth={handleNextMonth}
+              onDateClick={handleDateClick}
             />
             <CalendarLegend />
           </aside>

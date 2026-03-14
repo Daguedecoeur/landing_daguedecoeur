@@ -8,6 +8,7 @@ interface MiniCalendarProps {
   events: PlanningEvent[]
   onPrevMonth: () => void
   onNextMonth: () => void
+  onDateClick?: (eventSlug: string) => void
 }
 
 const DAYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
@@ -18,7 +19,7 @@ const dotColorMap: Record<string, string> = {
   convention: 'bg-purple-400',
 }
 
-export function MiniCalendar({ currentDate, events, onPrevMonth, onNextMonth }: MiniCalendarProps) {
+export function MiniCalendar({ currentDate, events, onPrevMonth, onNextMonth, onDateClick }: MiniCalendarProps) {
   const { monthLabel, days } = useMemo(() => {
     const year = currentDate.getFullYear()
     const month = currentDate.getMonth()
@@ -56,11 +57,13 @@ export function MiniCalendar({ currentDate, events, onPrevMonth, onNextMonth }: 
   }, [currentDate])
 
   const eventDates = useMemo(() => {
-    const map = new Map<string, string>()
+    const map = new Map<string, { type: string; slug: string }>()
     for (const event of events) {
       const d = new Date(event.startDate)
       const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
-      map.set(key, event.type)
+      if (!map.has(key)) {
+        map.set(key, { type: event.type, slug: event.slug })
+      }
     }
     return map
   }, [events])
@@ -102,7 +105,8 @@ export function MiniCalendar({ currentDate, events, onPrevMonth, onNextMonth }: 
           const dateKey = cell.date
             ? `${cell.date.getFullYear()}-${cell.date.getMonth()}-${cell.date.getDate()}`
             : null
-          const eventType = dateKey ? eventDates.get(dateKey) : undefined
+          const eventInfo = dateKey ? eventDates.get(dateKey) : undefined
+          const hasEvent = !!eventInfo
           const todayCell = isToday(cell.date)
 
           if (!cell.inMonth) {
@@ -116,18 +120,33 @@ export function MiniCalendar({ currentDate, events, onPrevMonth, onNextMonth }: 
           return (
             <span
               key={`d-${cell.day}`}
-              className={`py-2 relative flex flex-col items-center ${
+              role={hasEvent ? 'button' : undefined}
+              tabIndex={hasEvent ? 0 : undefined}
+              onClick={() => {
+                if (hasEvent && onDateClick) onDateClick(eventInfo.slug)
+              }}
+              onKeyDown={(e) => {
+                if (hasEvent && onDateClick && (e.key === 'Enter' || e.key === ' ')) {
+                  e.preventDefault()
+                  onDateClick(eventInfo.slug)
+                }
+              }}
+              className={`py-2 relative flex flex-col items-center transition-all ${
                 todayCell
                   ? 'bg-gold/20 rounded-lg border border-gold/40'
+                  : ''
+              } ${
+                hasEvent
+                  ? 'cursor-pointer hover:bg-gold/10 rounded-lg hover:scale-110'
                   : ''
               }`}
             >
               <span className={`text-sm ${todayCell ? 'font-bold text-gold' : ''}`}>
                 {cell.day}
               </span>
-              {eventType && (
+              {eventInfo && (
                 <span
-                  className={`w-1 h-1 rounded-full mt-1 ${dotColorMap[eventType] ?? 'bg-gold'}`}
+                  className={`w-1 h-1 rounded-full mt-1 ${dotColorMap[eventInfo.type] ?? 'bg-gold'}`}
                 />
               )}
             </span>

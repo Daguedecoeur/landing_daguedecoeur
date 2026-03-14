@@ -26,6 +26,7 @@ export function EventCard({ event, isPast = false }: EventCardProps) {
 
   return (
     <div
+      id={`event-${event.slug}`}
       className={`group rounded-xl overflow-hidden transition-all duration-300 ${
         isPast
           ? 'opacity-60 hover:opacity-80 border border-white/5'
