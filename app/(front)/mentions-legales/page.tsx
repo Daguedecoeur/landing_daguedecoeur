@@ -12,7 +12,7 @@ export default async function LegalMentionsPage() {
   const data = await useCase.execute()
 
   return (
-    <main className="min-h-screen bg-deep-violet py-24 sm:py-32">
+    <main className="flex-1 flex flex-col bg-deep-violet py-24 sm:py-32">
       <div className="mx-auto max-w-4xl px-6 lg:px-8">
         <h1 className="font-cinzel text-4xl font-bold tracking-tight text-gold sm:text-5xl mb-12 text-center drop-shadow-md">
           {data.title}

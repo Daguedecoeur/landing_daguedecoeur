@@ -7,7 +7,7 @@ interface PartnersLayoutProps {
 
 export function PartnersLayout({ data }: PartnersLayoutProps) {
   return (
-    <main className="min-h-screen bg-deep-violet py-24 sm:py-32">
+    <main className="flex-1 flex flex-col bg-deep-violet py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
