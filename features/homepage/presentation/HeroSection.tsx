@@ -20,7 +20,7 @@ export function HeroSection({ content, onOpenSubscribe }: HeroSectionProps) {
         <header className="relative min-h-[90vh] flex items-center overflow-hidden">
             <div className="absolute inset-0 z-0">
                 <Image
-                    src="/images/hero-daggerheart.png"
+                    src="/images/hero_new.jpeg"
                     alt="Univers épique Daggerheart — héros fantastiques"
                     fill
                     className="object-cover"
