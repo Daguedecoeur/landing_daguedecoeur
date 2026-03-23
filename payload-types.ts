@@ -69,7 +69,9 @@ export interface Config {
   collections: {
     users: User;
     articles: Article;
+    tags: Tag;
     media: Media;
+    events: Event;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -79,7 +81,9 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -90,14 +94,32 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
+    'decouvre-daggerheart': DecouvreDaggerheart;
     homepage: Homepage;
     'site-settings': SiteSetting;
     navbar: Navbar;
+    'newsletter-preferences-page': NewsletterPreferencesPage;
+    'legal-mentions': LegalMention;
+    partners: Partner;
+    tools: Tool;
+    'projects-and-locations': ProjectsAndLocation;
+    'planning-page': PlanningPage;
+    resources: Resource;
+    'about-page': AboutPage;
   };
   globalsSelect: {
+    'decouvre-daggerheart': DecouvreDaggerheartSelect<false> | DecouvreDaggerheartSelect<true>;
     homepage: HomepageSelect<false> | HomepageSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     navbar: NavbarSelect<false> | NavbarSelect<true>;
+    'newsletter-preferences-page': NewsletterPreferencesPageSelect<false> | NewsletterPreferencesPageSelect<true>;
+    'legal-mentions': LegalMentionsSelect<false> | LegalMentionsSelect<true>;
+    partners: PartnersSelect<false> | PartnersSelect<true>;
+    tools: ToolsSelect<false> | ToolsSelect<true>;
+    'projects-and-locations': ProjectsAndLocationsSelect<false> | ProjectsAndLocationsSelect<true>;
+    'planning-page': PlanningPageSelect<false> | PlanningPageSelect<true>;
+    resources: ResourcesSelect<false> | ResourcesSelect<true>;
+    'about-page': AboutPageSelect<false> | AboutPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -187,7 +209,31 @@ export interface Article {
   };
   coverImage?: (number | null) | Media;
   publishedAt?: string | null;
+  /**
+   * Ancien champ — utiliser les Tags à la place.
+   */
   category?: ('newsletter' | 'ressource' | 'actualite' | 'guide') | null;
+  /**
+   * Tags affichés sur la carte dans le blog
+   */
+  tags?: (number | Tag)[] | null;
+  /**
+   * Contrôle la taille de la carte dans la grille bento du blog
+   */
+  featuredSize?: ('featured' | 'large' | 'medium' | 'small') | null;
+  /**
+   * HTML brut importé depuis Brevo. Affiché à la place du richtext quand présent.
+   */
+  rawHtml?: string | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -210,6 +256,62 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  label: string;
+  /**
+   * Identifiant URL (ex: actualites, lore, chroniques)
+   */
+  slug: string;
+  color?: ('gold' | 'cream' | 'violet') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly identifier (ex: stream-eldoria)
+   */
+  slug: string;
+  type: 'stream' | 'game-release' | 'convention';
+  startDate: string;
+  /**
+   * Optionnel — pour les conventions multi-jours
+   */
+  endDate?: string | null;
+  /**
+   * Court résumé affiché sur les cartes
+   */
+  description?: string | null;
+  coverImage?: (number | null) | Media;
+  /**
+   * Lien Twitch, page convention, page produit, etc.
+   */
+  externalUrl?: string | null;
+  /**
+   * Par défaut : "Voir détails"
+   */
+  ctaLabel?: string | null;
+  /**
+   * Pour les conventions (ex: Paris, Cannes)
+   */
+  location?: string | null;
+  /**
+   * Afficher dans la section "Conventions à venir"
+   */
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -244,8 +346,16 @@ export interface PayloadLockedDocument {
         value: number | Article;
       } | null)
     | ({
+        relationTo: 'tags';
+        value: number | Tag;
+      } | null)
+    | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: number | Event;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -326,6 +436,28 @@ export interface ArticlesSelect<T extends boolean = true> {
   coverImage?: T;
   publishedAt?: T;
   category?: T;
+  tags?: T;
+  featuredSize?: T;
+  rawHtml?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  label?: T;
+  slug?: T;
+  color?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -347,6 +479,25 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  type?: T;
+  startDate?: T;
+  endDate?: T;
+  description?: T;
+  coverImage?: T;
+  externalUrl?: T;
+  ctaLabel?: T;
+  location?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -390,17 +541,17 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "homepage".
+ * via the `definition` "decouvre-daggerheart".
  */
-export interface Homepage {
+export interface DecouvreDaggerheart {
   id: number;
-  header: {
-    titleStart: string;
-    titleHighlight: string;
-    subtitle: string;
+  header?: {
+    titleStart?: string | null;
+    titleHighlight?: string | null;
+    subtitle?: string | null;
   };
-  painPoints: {
-    title: string;
+  painPoints?: {
+    title?: string | null;
     points?:
       | {
           text: string;
@@ -408,13 +559,13 @@ export interface Homepage {
         }[]
       | null;
   };
-  solution: {
-    title: string;
-    bio: string;
+  solution?: {
+    title?: string | null;
+    bio?: string | null;
     signature?: string | null;
   };
-  benefits: {
-    title: string;
+  benefits?: {
+    title?: string | null;
     items?:
       | {
           title: string;
@@ -440,8 +591,105 @@ export interface Homepage {
     communityText?: string | null;
     communityCta?: string | null;
     communityLink?: string | null;
+    accountCreationTitle?: string | null;
+    accountCreationText?: string | null;
+    accountCreationCta?: string | null;
+    accountCreationLink?: string | null;
     signatureText?: string | null;
     signatureName?: string | null;
+  };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage".
+ */
+export interface Homepage {
+  id: number;
+  hero?: {
+    titleStart?: string | null;
+    titleHighlight?: string | null;
+    subtitle?: string | null;
+    ctaLabel?: string | null;
+    socialProof?: string | null;
+  };
+  features?: {
+    titleStart?: string | null;
+    titleHighlight?: string | null;
+    titleEnd?: string | null;
+    items?:
+      | {
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+    videoCta?: string | null;
+    videoUrl?: string | null;
+  };
+  kit?: {
+    titleStart?: string | null;
+    titleHighlight?: string | null;
+    titleEnd?: string | null;
+    publisherNote?: string | null;
+    sectionLabel?: string | null;
+    items?:
+      | {
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+    ctaLabel?: string | null;
+  };
+  faq?: {
+    title?: string | null;
+    items?:
+      | {
+          question: string;
+          answer: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  form?: {
+    title?: string | null;
+    subtitle?: string | null;
+    firstNamePlaceholder?: string | null;
+    emailPlaceholder?: string | null;
+    acquisitionChannelLabel?: string | null;
+    submitButtonDefault?: string | null;
+    submitButtonLoading?: string | null;
+    disclaimer?: string | null;
+  };
+  success?: {
+    title?: string | null;
+    message?: string | null;
+    communityTitle?: string | null;
+    communityText?: string | null;
+    communityCta?: string | null;
+    communityLink?: string | null;
+    signatureText?: string | null;
+    signatureName?: string | null;
+  };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -457,8 +705,32 @@ export interface SiteSetting {
   discordLink?: string | null;
   socialLinks?:
     | {
-        platform: 'discord' | 'instagram' | 'youtube' | 'twitter';
+        platform: 'discord' | 'instagram' | 'youtube' | 'tiktok' | 'patreon' | 'twitter';
         url: string;
+        id?: string | null;
+      }[]
+    | null;
+  footerNavLinks?:
+    | {
+        label: string;
+        href: string;
+        external?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  footerCommunityLinks?:
+    | {
+        label: string;
+        href: string;
+        external?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  footerLegalLinks?:
+    | {
+        label: string;
+        href: string;
+        external?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -472,20 +744,49 @@ export interface SiteSetting {
 export interface Navbar {
   id: number;
   siteName: string;
+  ctaLabel?: string | null;
+  ctaMobileLabel?: string | null;
+  ctaHref?: string | null;
+  /**
+   * Liens du menu desktop. Peuvent avoir des sous-menus.
+   */
   menuItems?:
     | {
         label: string;
-        href: string;
+        emoji?: string | null;
+        href?: string | null;
+        /**
+         * Si renseigné, ce lien devient un dropdown.
+         */
+        children?:
+          | {
+              label: string;
+              href: string;
+              description?: string | null;
+              external?: boolean | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
   /**
-   * Si vide, les liens du menu principal seront utilisés avec "ACCUEIL" ajouté en premier.
+   * Liens rapides affichés en haut du menu mobile. Peuvent également avoir des sous-menus.
    */
   mobileMenuItems?:
     | {
         label: string;
-        href: string;
+        emoji?: string | null;
+        href?: string | null;
+        children?:
+          | {
+              label: string;
+              href: string;
+              description?: string | null;
+              external?: boolean | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -494,9 +795,201 @@ export interface Navbar {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "homepage_select".
+ * via the `definition` "newsletter-preferences-page".
  */
-export interface HomepageSelect<T extends boolean = true> {
+export interface NewsletterPreferencesPage {
+  id: number;
+  title?: string | null;
+  subtitle?: string | null;
+  unsubscribeWarning?: string | null;
+  confirmLabel?: string | null;
+  cancelLabel?: string | null;
+  successMessage?: string | null;
+  ctaTitle?: string | null;
+  ctaDescription?: string | null;
+  ctaButtonLabel?: string | null;
+  ctaButtonHref?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "legal-mentions".
+ */
+export interface LegalMention {
+  id: number;
+  title: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partners".
+ */
+export interface Partner {
+  id: number;
+  title: string;
+  subtitle?: string | null;
+  partners?:
+    | {
+        name: string;
+        description: string;
+        logo?: (number | null) | Media;
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tools".
+ */
+export interface Tool {
+  id: number;
+  title: string;
+  subtitle?: string | null;
+  categories?:
+    | {
+        name: string;
+        icon: string;
+        links?:
+          | {
+              name: string;
+              description: string;
+              url: string;
+              icon?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects-and-locations".
+ */
+export interface ProjectsAndLocation {
+  id: number;
+  locations?:
+    | {
+        title: string;
+        subtitle?: string | null;
+        /**
+         * Utilisé pour le lien dans le menu. Le lien sera /nos-projets#slug
+         */
+        slug: string;
+        description?: string | null;
+        ctaLabel?: string | null;
+        ctaHref?: string | null;
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Contenu éditable de la page Planning (hero)
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "planning-page".
+ */
+export interface PlanningPage {
+  id: number;
+  hero?: {
+    title?: string | null;
+    subtitle?: string | null;
+    backgroundImage?: (number | null) | Media;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "resources".
+ */
+export interface Resource {
+  id: number;
+  title: string;
+  subtitle?: string | null;
+  categories?:
+    | {
+        name: string;
+        icon: string;
+        items?:
+          | {
+              name: string;
+              description?: string | null;
+              file: number | Media;
+              fileSize?: string | null;
+              fileType?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page".
+ */
+export interface AboutPage {
+  id: number;
+  title: string;
+  /**
+   * Une phrase d accroche affichée sous le titre principal.
+   */
+  subtitle?: string | null;
+  /**
+   * Image hero affichée en haut de la page.
+   */
+  coverImage?: (number | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "decouvre-daggerheart_select".
+ */
+export interface DecouvreDaggerheartSelect<T extends boolean = true> {
   header?:
     | T
     | {
@@ -555,8 +1048,115 @@ export interface HomepageSelect<T extends boolean = true> {
         communityText?: T;
         communityCta?: T;
         communityLink?: T;
+        accountCreationTitle?: T;
+        accountCreationText?: T;
+        accountCreationCta?: T;
+        accountCreationLink?: T;
         signatureText?: T;
         signatureName?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage_select".
+ */
+export interface HomepageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        titleStart?: T;
+        titleHighlight?: T;
+        subtitle?: T;
+        ctaLabel?: T;
+        socialProof?: T;
+      };
+  features?:
+    | T
+    | {
+        titleStart?: T;
+        titleHighlight?: T;
+        titleEnd?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+        videoCta?: T;
+        videoUrl?: T;
+      };
+  kit?:
+    | T
+    | {
+        titleStart?: T;
+        titleHighlight?: T;
+        titleEnd?: T;
+        publisherNote?: T;
+        sectionLabel?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+        ctaLabel?: T;
+      };
+  faq?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
+      };
+  form?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        firstNamePlaceholder?: T;
+        emailPlaceholder?: T;
+        acquisitionChannelLabel?: T;
+        submitButtonDefault?: T;
+        submitButtonLoading?: T;
+        disclaimer?: T;
+      };
+  success?:
+    | T
+    | {
+        title?: T;
+        message?: T;
+        communityTitle?: T;
+        communityText?: T;
+        communityCta?: T;
+        communityLink?: T;
+        signatureText?: T;
+        signatureName?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -577,6 +1177,30 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
+  footerNavLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        external?: T;
+        id?: T;
+      };
+  footerCommunityLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        external?: T;
+        id?: T;
+      };
+  footerLegalLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        external?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -587,20 +1211,198 @@ export interface SiteSettingsSelect<T extends boolean = true> {
  */
 export interface NavbarSelect<T extends boolean = true> {
   siteName?: T;
+  ctaLabel?: T;
+  ctaMobileLabel?: T;
+  ctaHref?: T;
   menuItems?:
     | T
     | {
         label?: T;
+        emoji?: T;
         href?: T;
+        children?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              description?: T;
+              external?: T;
+              id?: T;
+            };
         id?: T;
       };
   mobileMenuItems?:
     | T
     | {
         label?: T;
+        emoji?: T;
         href?: T;
+        children?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              description?: T;
+              external?: T;
+              id?: T;
+            };
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletter-preferences-page_select".
+ */
+export interface NewsletterPreferencesPageSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  unsubscribeWarning?: T;
+  confirmLabel?: T;
+  cancelLabel?: T;
+  successMessage?: T;
+  ctaTitle?: T;
+  ctaDescription?: T;
+  ctaButtonLabel?: T;
+  ctaButtonHref?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "legal-mentions_select".
+ */
+export interface LegalMentionsSelect<T extends boolean = true> {
+  title?: T;
+  content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partners_select".
+ */
+export interface PartnersSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  partners?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        logo?: T;
+        url?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tools_select".
+ */
+export interface ToolsSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  categories?:
+    | T
+    | {
+        name?: T;
+        icon?: T;
+        links?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              url?: T;
+              icon?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects-and-locations_select".
+ */
+export interface ProjectsAndLocationsSelect<T extends boolean = true> {
+  locations?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        slug?: T;
+        description?: T;
+        ctaLabel?: T;
+        ctaHref?: T;
+        image?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "planning-page_select".
+ */
+export interface PlanningPageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        backgroundImage?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "resources_select".
+ */
+export interface ResourcesSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  categories?:
+    | T
+    | {
+        name?: T;
+        icon?: T;
+        items?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              file?: T;
+              fileSize?: T;
+              fileType?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page_select".
+ */
+export interface AboutPageSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  coverImage?: T;
+  content?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

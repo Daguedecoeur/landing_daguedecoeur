@@ -23,6 +23,12 @@ export interface SuccessContent {
     cta: string
     link: string
   }
+  accountCreation: {
+    title: string
+    text: string
+    cta: string
+    link: string
+  }
   signature: {
     text: string
     name: string
