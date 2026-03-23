@@ -52,7 +52,7 @@ function DesktopDropdownItem({ item }: { item: NavSubItem }) {
 export function DesktopNav({ items, isActive, ctaLabel, ctaHref, user, avatarUrl }: DesktopNavProps) {
     return (
         <>
-            <NavigationMenu className="hidden lg:flex" viewport={true}>
+            <NavigationMenu className="hidden lg:flex" viewport={false}>
                 <NavigationMenuList className="gap-0">
                     {items.map((item) => (
                         <NavigationMenuItem key={item.label}>
